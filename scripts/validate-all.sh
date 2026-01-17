@@ -23,6 +23,12 @@ echo "▶ Running skill validation..."
 if [ $? -ne 0 ]; then ((total_errors++)); fi
 echo ""
 
+# Run template validator
+echo "▶ Running template validation..."
+"$script_dir/validate-templates.sh"
+if [ $? -ne 0 ]; then ((total_errors++)); fi
+echo ""
+
 # Summary
 echo "╔═══════════════════════════════════════════════════════╗"
 echo "║                    SUMMARY                            ║"

@@ -29,9 +29,19 @@
 
 ---
 
+## v1.4: Template Parity ✅
+
+> **Complete**
+
+- [x] **Phase 1**: Core Documentation Templates — architecture, decisions, journal, stack
+- [x] **Phase 2**: Phase & Sprint Templates — phase-summary, sprint, todo, spec
+- [x] **Phase 3**: Validation — template validator added to validate-all
+
+---
+
 ## Next Milestone Ideas
 
-### v1.4: TBD
+### v1.5: TBD
 - [ ] User-defined improvements
 
 ---

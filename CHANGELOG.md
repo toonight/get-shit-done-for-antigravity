@@ -2,6 +2,17 @@
 
 All notable changes to GSD for Antigravity.
 
+## [1.4.0] - 2026-01-17
+
+### Added
+- **Template Parity** — 8 new templates (22 total)
+  - `architecture.md`, `decisions.md`, `journal.md`, `stack.md`
+  - `phase-summary.md`, `sprint.md`, `todo.md`, `spec.md`
+- `validate-templates.ps1/.sh` — template validation scripts
+- `validate-all` now includes template validation
+
+---
+
 ## [1.3.0] - 2026-01-17
 
 ### Added
