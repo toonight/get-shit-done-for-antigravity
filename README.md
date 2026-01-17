@@ -6,78 +6,82 @@
 
 ---
 
-## 🚀 Installation (New Project)
+## 🚀 Installation
 
-### Option 1: Clone and Copy (Recommended)
+### Clone and Copy
 
 ```powershell
-# 1. Clone the GSD template
+# Clone the GSD template
 git clone https://github.com/toonight/get-shit-done-for-antigravity.git gsd-template
 
-# 2. Copy to your project
+# Copy to your project
 cd your-project
 Copy-Item -Recurse gsd-template\.agent .\
 Copy-Item -Recurse gsd-template\.gemini .\
 Copy-Item -Recurse gsd-template\.gsd .\
 
-# 3. Clean up
+# Clean up
 Remove-Item -Recurse -Force gsd-template
-
-# 4. Initialize your SPEC.md
-# Edit .gsd/SPEC.md with your project vision
-```
-
-### Option 2: Git Subtree
-
-```powershell
-# Add as subtree (keeps connection for updates)
-git subtree add --prefix=.gsd-source https://github.com/toonight/get-shit-done-for-antigravity.git main --squash
-
-# Copy files to correct locations
-Copy-Item -Recurse .gsd-source\.agent .\
-Copy-Item -Recurse .gsd-source\.gemini .\
-Copy-Item -Recurse .gsd-source\.gsd .\
-```
-
-### Option 3: Manual Download
-
-1. Download ZIP from https://github.com/toonight/get-shit-done-for-antigravity
-2. Extract `.agent/`, `.gemini/`, `.gsd/` to your project root
-3. Delete the rest
-
----
-
-## 📋 Quick Start (After Installation)
-
-```
-1. Edit .gsd/SPEC.md         → Define vision, goals, mark FINALIZED
-2. /map                      → Analyze existing codebase (if any)
-3. /plan 1                   → Create Phase 1 plans
-4. /execute 1                → Implement Phase 1
-5. /verify 1                 → Confirm it works
-6. Repeat for each phase
 ```
 
 ---
 
-## 🎮 Commands
+## 📋 Quick Start
 
-| Command | Role | Purpose |
-|---------|------|---------|
-| `/map` | The Architect | Analyze codebase → ARCHITECTURE.md |
-| `/plan [N]` | The Strategist | Create PLAN.md files for phase N |
-| `/execute [N]` | The Engineer | Wave-based execution with atomic commits |
-| `/verify [N]` | The Auditor | Must-haves validation with proof |
-| `/debug [desc]` | The Debugger | Systematic debugging (3-strike rule) |
-| `/progress` | Navigator | Show current position |
-| `/pause` | — | Save state for session handoff |
-| `/resume` | — | Restore from last session |
-| `/add-todo` | — | Quick capture idea |
-| `/check-todos` | — | List pending items |
+```
+1. /new-project              → Initialize GSD in your project
+2. Edit .gsd/SPEC.md         → Define vision, mark FINALIZED
+3. /new-milestone            → Create milestone with phases
+4. /plan 1                   → Create Phase 1 plans
+5. /execute 1                → Implement Phase 1
+6. /verify 1                 → Confirm it works
+7. Repeat for each phase
+```
 
 ---
 
-## 🔒 Core Rules (GEMINI.md)
+## 🎮 Commands (22 Total)
+
+### Core Workflow
+| Command | Purpose |
+|---------|---------|
+| `/map` | Analyze codebase → ARCHITECTURE.md |
+| `/plan [N]` | Create PLAN.md files for phase N |
+| `/execute [N]` | Wave-based execution with atomic commits |
+| `/verify [N]` | Must-haves validation with proof |
+| `/debug [desc]` | Systematic debugging (3-strike rule) |
+
+### Project Setup
+| Command | Purpose |
+|---------|---------|
+| `/new-project` | Initialize GSD in new project |
+| `/new-milestone` | Create milestone with phases |
+| `/complete-milestone` | Archive completed milestone |
+| `/audit-milestone` | Review milestone quality |
+
+### Phase Management
+| Command | Purpose |
+|---------|---------|
+| `/add-phase` | Add phase to end of roadmap |
+| `/insert-phase` | Insert phase (renumbers) |
+| `/remove-phase` | Remove phase (safety checks) |
+| `/discuss-phase` | Clarify scope before planning |
+| `/research-phase` | Deep technical research |
+| `/list-phase-assumptions` | Surface planning assumptions |
+| `/plan-milestone-gaps` | Create gap closure plans |
+
+### Navigation & State
+| Command | Purpose |
+|---------|---------|
+| `/progress` | Show current position |
+| `/pause` | Save state for session handoff |
+| `/resume` | Restore from last session |
+| `/add-todo` | Quick capture idea |
+| `/check-todos` | List pending items |
+
+---
+
+## 🔒 Core Rules
 
 | Rule | Enforcement |
 |------|-------------|
@@ -91,62 +95,44 @@ Copy-Item -Recurse .gsd-source\.gsd .\
 ## 📁 File Structure
 
 ```
-your-project/
-├── .agent/
-│   ├── workflows/     # 10 slash commands
-│   └── skills/        # 8 agent specializations
-├── .gemini/
-│   └── GEMINI.md      # Rules enforcement
-├── .gsd/
-│   ├── SPEC.md        # ← START HERE (define & finalize)
-│   ├── ROADMAP.md     # Phases (created by /plan)
-│   ├── STATE.md       # Session memory
-│   ├── ARCHITECTURE.md
-│   ├── STACK.md
-│   ├── DECISIONS.md
-│   ├── JOURNAL.md
-│   ├── TODO.md
-│   ├── templates/     # Reusable templates
-│   └── examples/      # Usage examples
-└── (your code)
+.agent/
+├── workflows/        # 22 slash commands
+└── skills/           # 8 agent specializations
+
+.gemini/
+└── GEMINI.md         # Rules enforcement
+
+.gsd/
+├── SPEC.md           # ← START HERE
+├── ROADMAP.md        # Phases
+├── STATE.md          # Session memory
+├── ARCHITECTURE.md   # System design
+├── STACK.md          # Tech inventory
+├── DECISIONS.md      # ADRs
+├── JOURNAL.md        # Session log
+├── TODO.md           # Quick capture
+├── templates/        # Document templates
+└── examples/         # Usage examples
+
+GSD-STYLE.md          # Style guide
 ```
 
 ---
 
-## 🗒️ XML Task Structure
+## 📚 Documentation
 
-Plans use semantic XML for precision:
-
-```xml
-<task type="auto">
-  <name>Create login endpoint</name>
-  <files>src/api/auth/login.ts</files>
-  <action>
-    POST endpoint accepting {email, password}.
-    AVOID: jsonwebtoken (CommonJS issues)
-    USE: jose library instead
-  </action>
-  <verify>curl -X POST localhost:3000/api/login returns 200</verify>
-  <done>Valid creds → 200 + cookie, invalid → 401</done>
-</task>
-```
-
----
-
-## 📚 Examples
-
-See `.gsd/examples/` for:
-- [workflow-example.md](.gsd/examples/workflow-example.md) — Complete walkthrough
-- [quick-reference.md](.gsd/examples/quick-reference.md) — Printable card
+- [GSD-STYLE.md](GSD-STYLE.md) — Complete style guide
+- [Examples](.gsd/examples/) — Usage walkthroughs
+- [Templates](.gsd/templates/) — Document templates
 
 ---
 
 ## 🧠 Philosophy
 
-- **Plan before building** — Specs matter (but no enterprise theater)
+- **Plan before building** — Specs matter
 - **Fresh context > polluted context** — State dumps prevent hallucinations
-- **Proof over trust** — Screenshots and command outputs, not "looks right"
-- **Aggressive atomicity** — 2-3 tasks per plan, atomic commits
+- **Proof over trust** — Evidence, not claims
+- **Aggressive atomicity** — 2-3 tasks per plan
 
 ---
 
