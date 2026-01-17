@@ -116,10 +116,15 @@ GSD for Antigravity is a **meta-prompting system** for spec-driven, context-engi
 
 ## Technical Debt
 
-- [ ] No automated tests for workflow logic
-- [ ] Templates are examples, not validated schemas
-- [ ] No version tracking for workflow changes
-- [ ] Missing `/add-todo`, `/check-todos` workflows
+### Resolved ✅
+- [x] ~~No automated tests for workflow logic~~ → `validate-all.ps1/.sh` (v1.3)
+- [x] ~~Templates are examples, not validated schemas~~ → `validate-templates.ps1/.sh` (v1.4)
+- [x] ~~No version tracking for workflow changes~~ → `VERSION` file (v1.3)
+- [x] ~~Missing `/add-todo`, `/check-todos` workflows~~ → Added (v1.1)
+
+### Remaining
+- [ ] No CI/CD for automated validation on push
+- [ ] Skills lack unit test coverage
 
 ## Conventions
 
