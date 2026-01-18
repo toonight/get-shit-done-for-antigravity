@@ -25,7 +25,7 @@ A complete, self-documenting GSD methodology implementation for Google Antigravi
 
 ## Success Criteria
 - [x] All 4 core rules enforced via GEMINI.md
-- [x] 21 workflows covering full development lifecycle
+- [x] 25 workflows covering full development lifecycle
 - [x] 8 skills for specialized agent behaviors
 - [x] 22 templates for consistent documentation
 - [x] Running /map produces useful ARCHITECTURE.md

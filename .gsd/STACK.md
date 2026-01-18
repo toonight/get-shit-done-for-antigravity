@@ -65,7 +65,7 @@ None — this is a pure documentation/configuration project with no runtime depe
 
 | Category | Count | Total Lines (approx) |
 |----------|-------|---------------------|
-| Workflows | 21 | ~3500 |
+| Workflows | 25 | ~4000 |
 | Skills | 8 | ~1200 |
 | Templates | 22 | ~1400 |
 | Scripts | 8 | ~400 |
