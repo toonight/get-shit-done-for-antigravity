@@ -335,6 +335,7 @@ Files created:
 
 ▶ NEXT
 
+/discuss-phase 1 — Clarify scope (optional but recommended)
 /plan 1 — Create Phase 1 execution plans
 
 ───────────────────────────────────────────────────────

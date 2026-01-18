@@ -75,20 +75,25 @@ Then run `/new-project` and follow the prompts.
 /new-project → Deep questioning → SPEC.md (finalized)
 ```
 
-### 2. Plan → Research → Tasks
+### 2. Discuss (Optional) → Context
+```
+/discuss-phase 1 → Clarify scope → DECISIONS.md
+```
+
+### 3. Plan → Research → Tasks
 ```
 /plan 1 → Discovery → PLAN.md with XML tasks
 ```
 
-### 3. Execute → Verify → Commit
+### 4. Execute → Verify → Commit
 ```
 /execute 1 → Wave execution → Atomic commits
 /verify 1 → Must-haves check → Evidence captured
 ```
 
-### 4. Repeat
+### 5. Repeat
 ```
-/plan 2 → /execute 2 → /verify 2 → ...
+/discuss-phase 2 → /plan 2 → /execute 2 → ...
 /complete-milestone → Next milestone
 ```
 
@@ -207,6 +212,20 @@ All workflow files include **dual syntax** — both PowerShell and Bash commands
 └── examples/         # Usage walkthroughs
 
 GSD-STYLE.md          # Complete style guide
+```
+
+---
+
+## Typical Session
+
+```
+/resume              ← Load context from last session
+/progress            ← See where you left off
+/discuss-phase 2     ← Clarify requirements (optional)
+/plan 2              ← Plan next phase
+/execute 2           ← Implement with atomic commits
+/verify 2            ← Prove it works (screenshots, tests)
+/pause               ← Save state for later
 ```
 
 ---
