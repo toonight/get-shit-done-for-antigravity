@@ -6,6 +6,14 @@
 
 ---
 
+## Canonical Rules
+
+**All canonical rules are in [PROJECT_RULES.md](../PROJECT_RULES.md).**
+
+This file provides Gemini-specific integration. For the complete methodology, see PROJECT_RULES.md.
+
+---
+
 ## Core Principles
 
 1. **Plan Before You Build** — No code without specification
@@ -15,86 +23,15 @@
 
 ---
 
-## Rule 1: The Planning Lock 🔒
-
-**BEFORE writing any implementation code, you MUST verify:**
+## Quick Reference
 
 ```
-✓ .gsd/SPEC.md exists AND contains "Status: FINALIZED"
-✓ .gsd/ROADMAP.md exists AND has at least one defined phase
+Before coding    → Check SPEC.md is FINALIZED
+Before file read → Search first, then targeted read
+After each task  → Update STATE.md
+After 3 failures → State dump + fresh session
+Before "Done"    → Empirical proof captured
 ```
-
-**If either condition fails:**
-- STOP immediately
-- Inform the user that planning must be completed first
-- Offer to help finalize the SPEC or create the ROADMAP
-- DO NOT write any implementation code
-
-**Exceptions:**
-- Documentation updates (README, comments)
-- Configuration files for tooling
-- Test scaffolding (but not implementation)
-
----
-
-## Rule 2: State Persistence 💾
-
-**AFTER every successful task completion, you MUST:**
-
-1. **Update `.gsd/STATE.md`** with:
-   - Current position (phase, task, status)
-   - What was just accomplished
-   - Next steps
-
-2. **Update `.gsd/JOURNAL.md`** with session entry if:
-   - Significant milestone reached
-   - Session is ending
-   - Major decision was made
-
-**This is non-negotiable.** State persistence ensures context continuity across sessions.
-
----
-
-## Rule 3: Context Hygiene 🧹
-
-**IF debugging exceeds 3 consecutive failed attempts:**
-
-1. **STOP** the current approach
-2. **Summarize** to `.gsd/STATE.md`:
-   - What was tried
-   - What failed
-   - Current hypothesis
-3. **Document** the blocker in `.gsd/DECISIONS.md`
-4. **Recommend** the user start a fresh session with this context
-
-**Rationale:** Extended debugging in a polluted context leads to:
-- Circular reasoning
-- Missed obvious solutions  
-- Hallucinated fixes
-
-A fresh context with documented state often immediately sees the solution.
-
----
-
-## Rule 4: Empirical Validation ✅
-
-**Every change MUST be verified before marking complete:**
-
-| Change Type | Verification Method |
-|-------------|---------------------|
-| UI changes | Browser screenshot confirming visual state |
-| API changes | Terminal command showing correct response |
-| Build changes | Successful build/test command output |
-| Config changes | Verification command proving effect |
-
-**Never mark a phase "Done" based on:**
-- "The code looks correct"
-- "This should work"
-- "I've made similar changes before"
-
-**Always mark a phase "Done" based on:**
-- Empirical evidence captured and documented
-- Verification criteria from ROADMAP.md satisfied
 
 ---
 
@@ -113,16 +50,18 @@ These rules integrate with the GSD workflows:
 
 ---
 
-## Quick Reference
+## Gemini-Specific Tips
 
-```
-Before coding    → Check SPEC.md is FINALIZED
-After each task  → Update STATE.md
-After 3 failures → State dump + fresh session
-Before "Done"    → Empirical proof captured
-```
+For Gemini-specific enhancements, see [adapters/GEMINI.md](../adapters/GEMINI.md).
+
+Key recommendations:
+- **Flash** for quick iterations and simple edits
+- **Pro** for complex planning and analysis
+- Large context is available but **search-first** still applies
 
 ---
 
 *GSD Methodology adapted for Google Antigravity*
+*Canonical rules: [PROJECT_RULES.md](../PROJECT_RULES.md)*
 *Source: https://github.com/glittercowboy/get-shit-done*
+
