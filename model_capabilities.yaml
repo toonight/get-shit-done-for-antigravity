@@ -1,0 +1,108 @@
+# Model Capabilities Registry
+#
+# This file is OPTIONAL. GSD works without it.
+# If present, it provides guidance for model selection.
+#
+# Usage: Reference this file when choosing models by capability.
+# Do NOT make any workflow depend on this file existing.
+
+# Capability definitions
+capabilities:
+  thinking_mode:
+    description: "Extended reasoning with internal monologue"
+    benefits:
+      - Better for complex planning
+      - Improved debugging hypotheses
+      - More thorough architecture analysis
+    
+  long_context:
+    description: "Context window > 100k tokens"
+    benefits:
+      - Can analyze multiple files at once
+      - Better for large refactors
+      - Full codebase reviews
+    
+  tools:
+    description: "Function/tool calling support"
+    benefits:
+      - Execute verification commands
+      - Interact with external systems
+      - Structured outputs
+    
+  speed_tier:
+    description: "Response latency tier"
+    values:
+      - fast: "< 2s average, good for iteration"
+      - standard: "2-5s average, balanced"
+      - reasoning: "> 5s average, deep analysis"
+
+# Example model profiles (illustrative, not exhaustive)
+# These show how to categorize models by capability type.
+
+profiles:
+  # Fast iteration models
+  fast_coder:
+    speed_tier: fast
+    thinking_mode: false
+    long_context: false
+    tools: true
+    best_for:
+      - Quick edits
+      - Simple implementations
+      - Frequent iteration cycles
+    examples:
+      - "Flash/Turbo variants"
+      - "Smaller parameter models"
+  
+  # Standard balanced models
+  standard:
+    speed_tier: standard
+    thinking_mode: false
+    long_context: true
+    tools: true
+    best_for:
+      - Most development tasks
+      - Moderate refactoring
+      - General coding
+    examples:
+      - "Pro/Standard variants"
+      - "Mid-tier models"
+  
+  # Deep reasoning models
+  reasoning:
+    speed_tier: reasoning
+    thinking_mode: true
+    long_context: true
+    tools: true
+    best_for:
+      - Architecture planning
+      - Complex debugging
+      - Security analysis
+    examples:
+      - "Thinking/Reasoning variants"
+      - "Advanced reasoning models"
+
+# Phase recommendations (suggestions, not requirements)
+phase_recommendations:
+  planning:
+    preferred_profile: reasoning
+    reason: "Complex decisions benefit from extended thinking"
+    
+  implementation:
+    preferred_profile: fast_coder
+    reason: "Frequent iteration needs speed"
+    
+  refactoring:
+    preferred_profile: standard
+    reason: "Balance of context and speed"
+    
+  debugging:
+    preferred_profile: reasoning
+    reason: "Hypothesis generation needs depth"
+    
+  review:
+    preferred_profile: standard
+    reason: "Large context for full diffs"
+
+# IMPORTANT: This file is for guidance only.
+# Never fail a workflow because a specific model capability is missing.
