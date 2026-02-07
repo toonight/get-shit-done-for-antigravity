@@ -64,7 +64,7 @@ Execute all plans in a phase...
 ### Task Structure
 
 ```xml
-<task type="auto">
+<task type="auto" effort="medium">
   <name>Clear descriptive name</name>
   <files>exact/path/to/file.ts</files>
   <action>
@@ -76,6 +76,22 @@ Execute all plans in a phase...
   <done>measurable acceptance criteria</done>
 </task>
 ```
+
+### Effort Attribute (Optional)
+
+The `effort` attribute hints at task complexity for model selection:
+
+| Value | Use Case | Model Hint |
+|-------|----------|------------|
+| `low` | Simple edits, formatting | Fast models |
+| `medium` | Standard implementation (default) | Standard models |
+| `high` | Complex logic, refactoring | Reasoning models |
+| `max` | Architecture, security-critical | Deep reasoning |
+
+**Default:** `medium` if omitted. No workflow should fail if this attribute is absent.
+
+See [docs/model-selection-playbook.md](docs/model-selection-playbook.md) for model selection guidance.
+
 
 ### Checkpoint Structure
 
