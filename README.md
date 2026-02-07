@@ -265,34 +265,117 @@ All workflow files include **dual syntax** — both PowerShell and Bash commands
 
 ---
 
-## 📁 File Structure
+## 🤖 Multi-Model Support
+
+GSD is **model-agnostic**. Use any LLM that works in your environment.
+
+### Canonical Rules
+
+All rules live in [PROJECT_RULES.md](PROJECT_RULES.md) — the single source of truth.
+
+### Optional Adapters
+
+Model-specific enhancements (optional, never required):
 
 ```
-.agent/
-├── workflows/        # 21 slash commands
-└── skills/           # 8 agent specializations
-
-.gemini/
-└── GEMINI.md         # Rules enforcement
-
-.gsd/
-├── SPEC.md           # ← START HERE (finalize first)
-├── ROADMAP.md        # Phases and progress
-├── STATE.md          # Session memory
-├── ARCHITECTURE.md   # System design (/map output)
-├── STACK.md          # Tech inventory
-├── DECISIONS.md      # Architecture Decision Records
-├── JOURNAL.md        # Session log
-├── TODO.md           # Quick capture
-├── templates/        # Document templates
-└── examples/         # Usage walkthroughs
-
-GSD-STYLE.md          # Complete style guide
+adapters/
+├── CLAUDE.md    # Extended thinking, effort levels
+├── GEMINI.md    # Flash vs Pro selection
+└── GPT_OSS.md   # Function calling, context handling
 ```
+
+### Model Selection by Phase
+
+| Phase | Recommended | Why |
+|-------|-------------|-----|
+| Planning | Reasoning models | Complex decisions |
+| Implementation | Fast models | Iteration speed |
+| Debugging | Reasoning models | Hypothesis testing |
+| Review | Long-context models | Full diff analysis |
+
+See [docs/model-selection-playbook.md](docs/model-selection-playbook.md) for detailed guidance.
 
 ---
 
+## 🔍 Search-First Mode
 
+**Principle:** Search before reading files completely.
+
+### Why?
+- Reduces context pollution
+- Faster codebase understanding
+- Prevents reading irrelevant code
+
+### Setup (Optional)
+
+**PowerShell:**
+```powershell
+.\scripts\setup_search.ps1    # Checks for ripgrep/fd
+.\scripts\search_repo.ps1 "pattern"  # Search wrapper
+```
+
+**Bash:**
+```bash
+./scripts/setup_search.sh     # Checks for ripgrep/fd
+./scripts/search_repo.sh "pattern"   # Search wrapper
+```
+
+**No installation required** — falls back to built-in tools (Select-String/grep).
+
+### Workflow
+
+1. **Define question** — What are you looking for?
+2. **Search first** — `.\scripts\search_repo.ps1 "keyword"`
+3. **Evaluate results** — Which files matter?
+4. **Targeted read** — Only read relevant sections
+
+See [.agent/skills/context-fetch/SKILL.md](.agent/skills/context-fetch/SKILL.md) for the full skill.
+
+---
+
+## 📁 File Structure
+
+```
+PROJECT_RULES.md          # ← Canonical rules (model-agnostic)
+GSD-STYLE.md              # Complete style guide
+
+.agent/
+├── workflows/            # 25 slash commands
+└── skills/               # 9 agent specializations (incl. context-fetch)
+
+.gemini/
+└── GEMINI.md             # Gemini integration
+
+.gsd/
+├── SPEC.md               # ← START HERE (finalize first)
+├── ROADMAP.md            # Phases and progress
+├── STATE.md              # Session memory
+├── ARCHITECTURE.md       # System design (/map output)
+├── STACK.md              # Tech inventory
+├── DECISIONS.md          # Architecture Decision Records
+├── JOURNAL.md            # Session log
+├── TODO.md               # Quick capture
+├── templates/            # Document templates
+└── examples/             # Usage walkthroughs
+
+adapters/                 # Optional model-specific enhancements
+├── CLAUDE.md
+├── GEMINI.md
+└── GPT_OSS.md
+
+docs/                     # Operational documentation
+├── model-selection-playbook.md
+└── runbook.md
+
+scripts/                  # Utility scripts
+├── validate-*.ps1/.sh    # Structure validators
+├── setup_search.ps1/.sh  # Search tool setup
+└── search_repo.ps1/.sh   # Search wrapper
+
+model_capabilities.yaml   # Optional capability registry
+```
+
+---
 
 ## 🧪 Testing
 
@@ -316,7 +399,10 @@ Run validation scripts to verify GSD structure:
 
 ## 📚 Documentation
 
+- [PROJECT_RULES.md](PROJECT_RULES.md) — Canonical model-agnostic rules
 - [GSD-STYLE.md](GSD-STYLE.md) — Complete style and conventions guide
+- [docs/model-selection-playbook.md](docs/model-selection-playbook.md) — Model selection guidance
+- [docs/runbook.md](docs/runbook.md) — Operational procedures
 - [Examples](.gsd/examples/) — Usage walkthroughs and quick reference
 - [Templates](.gsd/templates/) — Document templates for plans, verification, etc.
 
@@ -328,6 +414,8 @@ Run validation scripts to verify GSD structure:
 - **Fresh context > polluted context** — State dumps prevent hallucinations
 - **Proof over trust** — Screenshots and command outputs, not "looks right"
 - **Aggressive atomicity** — 2-3 tasks per plan, atomic commits
+- **Search before reading** — Don't load files blindly
+- **Model-agnostic** — Works with any capable LLM
 - **No enterprise theater** — Solo dev + AI workflow only
 
 ---
