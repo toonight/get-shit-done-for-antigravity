@@ -42,6 +42,12 @@ git clone https://github.com/toonight/get-shit-done-for-antigravity.git gsd-temp
 Copy-Item -Recurse gsd-template\.agent .\
 Copy-Item -Recurse gsd-template\.gemini .\
 Copy-Item -Recurse gsd-template\.gsd .\
+Copy-Item -Recurse gsd-template\adapters .\
+Copy-Item -Recurse gsd-template\docs .\
+Copy-Item -Recurse gsd-template\scripts .\
+Copy-Item -Force gsd-template\PROJECT_RULES.md .\
+Copy-Item -Force gsd-template\GSD-STYLE.md .\
+Copy-Item -Force gsd-template\model_capabilities.yaml .\
 
 # Clean up
 Remove-Item -Recurse -Force gsd-template
@@ -59,12 +65,20 @@ git clone https://github.com/toonight/get-shit-done-for-antigravity.git gsd-temp
 cp -r gsd-template/.agent ./
 cp -r gsd-template/.gemini ./
 cp -r gsd-template/.gsd ./
+cp -r gsd-template/adapters ./
+cp -r gsd-template/docs ./
+cp -r gsd-template/scripts ./
+cp gsd-template/PROJECT_RULES.md ./
+cp gsd-template/GSD-STYLE.md ./
+cp gsd-template/model_capabilities.yaml ./
 
 # Clean up
 rm -rf gsd-template
 ```
 
 Then run `/new-project` and follow the prompts.
+
+> **💡 Tip:** You can also use `/install` from a clean project to automate the installation above.
 
 ---
 
@@ -178,7 +192,9 @@ No "trust me, it works." Every verification produces evidence:
 
 ---
 
-## 🎮 Commands (25 Total)
+## 🎮 Commands (26 Total)
+
+> **Note:** Slash commands are typed directly as chat messages (e.g. send `/plan 1`). They are **not** IDE autocomplete features — if your editor shows "nothing found" when pressing `/`, that's normal. Just type the full command and send it. The AI will recognize and execute the workflow.
 
 ### Core Workflow
 | Command | Purpose |
@@ -192,6 +208,7 @@ No "trust me, it works." Every verification produces evidence:
 ### Project Setup
 | Command | Purpose |
 |---------|---------|
+| `/install` | Install GSD from GitHub |
 | `/new-project` | Deep questioning → SPEC.md |
 | `/new-milestone` | Create milestone with phases |
 | `/complete-milestone` | Archive completed milestone |

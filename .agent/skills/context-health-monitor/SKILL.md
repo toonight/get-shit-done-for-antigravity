@@ -83,9 +83,23 @@ When triggered, write to `.gsd/STATE.md`:
 - [file2.ext] — [what state it's in]
 ```
 
+## Auto-Save Protocol
+
+**Critical:** When any warning signal triggers, the agent must save state BEFORE recommending `/pause` to the user. This ensures state persists even if the session hard-terminates.
+
+### Steps
+
+1. **Write** a state snapshot to `.gsd/STATE.md` immediately when a threshold is hit
+2. **Include** at minimum: current phase, current task, last action, next step
+3. **Then** inform the user of the situation and recommend `/pause`
+
+### Why
+
+Sessions can terminate abruptly (usage limits, context limits, network errors). If the agent waits for the user to type `/pause`, it may never get the chance. By saving first and recommending second, state is always preserved.
+
 ## Integration
 
 This skill integrates with:
-- `/pause` — Triggers proper session handoff
+- `/pause` — Triggers proper session handoff (includes proactive auto-save)
 - `/resume` — Loads the state dump context
 - Rule 3 in `GEMINI.md` — Context Hygiene enforcement

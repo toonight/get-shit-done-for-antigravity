@@ -139,3 +139,38 @@ If pausing due to debugging failures:
 
 A fresh context often immediately sees solutions that a polluted context missed.
 </context_hygiene>
+
+<proactive_state_save>
+## Proactive Auto-Save (Session Limit Protection)
+
+**Problem:** If a session hard-terminates (usage/context limit), `/pause` becomes unreachable.
+
+**Solution:** The agent should auto-save state BEFORE limits are hit.
+
+### When to Auto-Save
+
+| Trigger | Action |
+|---------|--------|
+| Context usage reaches ~50-70% | Write lightweight state snapshot to `.gsd/STATE.md` |
+| 3-strike debugging rule fires | Save state dump BEFORE recommending `/pause` |
+| Extended session detected | Periodic state checkpoints to `.gsd/STATE.md` |
+
+### Auto-Save Protocol
+
+1. **Detect** context health warning signals (see context-health-monitor skill)
+2. **Write** current state to `.gsd/STATE.md` immediately
+3. **Then** inform the user and recommend `/pause`
+4. If session terminates unexpectedly, state is already saved
+
+### Minimum Auto-Save Content
+
+```markdown
+## Auto-Save: {timestamp}
+- **Phase**: {current phase}
+- **Task**: {current task or "between tasks"}
+- **Last Action**: {what was just completed}
+- **Next Step**: {what should happen next}
+```
+
+**Key principle:** Save first, recommend second. Never rely on the user being able to issue `/pause`.
+</proactive_state_save>
