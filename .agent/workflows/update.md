@@ -115,6 +115,8 @@ Copy-Item -Recurse -Force ".gsd-update-temp/.gsd/templates/*" ".gsd/templates/"
 # Update root files
 Copy-Item -Force ".gsd-update-temp/GSD-STYLE.md" "./"
 Copy-Item -Force ".gsd-update-temp/CHANGELOG.md" "./"
+Copy-Item -Force ".gsd-update-temp/PROJECT_RULES.md" "./"
+Copy-Item -Force ".gsd-update-temp/VERSION" "./"
 ```
 
 **Bash:**
@@ -132,6 +134,8 @@ cp -r .gsd-update-temp/.gsd/templates/* .gsd/templates/
 # Update root files
 cp .gsd-update-temp/GSD-STYLE.md ./
 cp .gsd-update-temp/CHANGELOG.md ./
+cp .gsd-update-temp/PROJECT_RULES.md ./
+cp .gsd-update-temp/VERSION ./
 ```
 
 ---
