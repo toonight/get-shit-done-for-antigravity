@@ -160,7 +160,7 @@ type(scope): description
 PROJECT_RULES.md          # ← This file (canonical rules)
 GSD-STYLE.md              # Style and conventions
 
-.agent/
+.agents/
 ├── workflows/            # Slash commands (/plan, /execute, etc.)
 └── skills/               # Agent specializations
 

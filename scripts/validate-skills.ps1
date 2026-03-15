@@ -10,7 +10,7 @@ Write-Host " GSD ► VALIDATING SKILLS" -ForegroundColor Cyan
 Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Cyan
 Write-Host ""
 
-$skills = Get-ChildItem ".agent/skills" -Directory
+$skills = Get-ChildItem ".agents/skills" -Directory
 
 foreach ($skill in $skills) {
     $SkillsChecked++

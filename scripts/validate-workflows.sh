@@ -11,7 +11,7 @@ echo " GSD ► VALIDATING WORKFLOWS"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
 
-for file in .agent/workflows/*.md; do
+for file in .agents/workflows/*.md; do
     ((workflows_checked++))
     filename=$(basename "$file")
     has_errors=false

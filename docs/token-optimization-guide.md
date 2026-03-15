@@ -202,6 +202,6 @@ Track these for improvement:
 ---
 
 *See also:*
-- *[.agent/skills/token-budget/SKILL.md](.agent/skills/token-budget/SKILL.md)*
-- *[.agent/skills/context-compressor/SKILL.md](.agent/skills/context-compressor/SKILL.md)*
+- *[.agents/skills/token-budget/SKILL.md](.agents/skills/token-budget/SKILL.md)*
+- *[.agents/skills/context-compressor/SKILL.md](.agents/skills/context-compressor/SKILL.md)*
 - *[PROJECT_RULES.md](PROJECT_RULES.md) — Token Efficiency Rules*
