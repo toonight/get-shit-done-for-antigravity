@@ -10,7 +10,7 @@ Write-Host " GSD ► VALIDATING WORKFLOWS" -ForegroundColor Cyan
 Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Cyan
 Write-Host ""
 
-$workflows = Get-ChildItem ".agent/workflows/*.md"
+$workflows = Get-ChildItem ".agents/workflows/*.md"
 
 foreach ($file in $workflows) {
     $WorkflowsChecked++

@@ -10,7 +10,7 @@ echo " GSD ► VALIDATING SKILLS"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
 
-for skill_dir in .agent/skills/*/; do
+for skill_dir in .agents/skills/*/; do
     ((skills_checked++))
     skill_name=$(basename "$skill_dir")
     skill_file="$skill_dir/SKILL.md"

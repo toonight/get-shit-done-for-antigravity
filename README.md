@@ -92,7 +92,7 @@ cd your-project
 git clone https://github.com/toonight/get-shit-done-for-antigravity.git gsd-template
 
 # Copy to your project
-Copy-Item -Recurse gsd-template\.agent .\
+Copy-Item -Recurse gsd-template\.agents .\
 Copy-Item -Recurse gsd-template\.gemini .\
 Copy-Item -Recurse gsd-template\.gsd .\
 Copy-Item -Recurse gsd-template\adapters .\
@@ -119,7 +119,7 @@ cd your-project
 git clone https://github.com/toonight/get-shit-done-for-antigravity.git gsd-template
 
 # Copy to your project
-cp -r gsd-template/.agent ./
+cp -r gsd-template/.agents ./
 cp -r gsd-template/.gemini ./
 cp -r gsd-template/.gsd ./
 cp -r gsd-template/adapters ./
@@ -469,7 +469,7 @@ adapters/
 📄 PROJECT_RULES.md          # ← Canonical rules (model-agnostic)
 📄 GSD-STYLE.md              # Complete style guide
 
-📂 .agent/
+📂 .agents/
 ├── 📂 workflows/            # 25 slash commands
 └── 📂 skills/               # 11 agent specializations
 

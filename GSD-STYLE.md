@@ -16,14 +16,14 @@ GSD is a **meta-prompting system** where every file is both implementation and s
 
 ## File Structure Conventions
 
-### Workflows (`.agent/workflows/*.md`)
+### Workflows (`.agents/workflows/*.md`)
 
 Slash commands the user invokes. Each workflow:
 - Has YAML frontmatter with `description`
 - Contains XML-structured process blocks
 - Ends with "Next Steps" routing
 
-### Skills (`.agent/skills/*/SKILL.md`)
+### Skills (`.agents/skills/*/SKILL.md`)
 
 Specialized agent behaviors. Each skill:
 - Has YAML frontmatter with `name` and `description`

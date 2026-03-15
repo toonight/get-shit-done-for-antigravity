@@ -16,7 +16,7 @@ Systematically diagnose an issue using hypothesis-driven debugging, with persist
 <context>
 **Issue:** $ARGUMENTS (description of the problem to debug)
 
-**Skill reference:** `.agent/skills/debugger/SKILL.md`
+**Skill reference:** `.agents/skills/debugger/SKILL.md`
 </context>
 
 <process>
