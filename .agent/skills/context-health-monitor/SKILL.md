@@ -22,6 +22,8 @@ The agent should self-monitor for these warning signs:
 | Confusion indicators | "I'm not sure", backtracking | Document uncertainty |
 | Session length | Extended back-and-forth | Recommend `/pause` |
 
+> **Context Window Note:** With 1M context, the 3-strike rule still applies to prevent endless loops, but `/pause` pressure from pure session length is significantly reduced. Scale your "Session length" threshold to match your active context window.
+
 ## Behavior Rules
 
 ### Rule 1: The 3-Strike Rule

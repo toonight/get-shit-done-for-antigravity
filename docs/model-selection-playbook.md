@@ -80,7 +80,9 @@
 | **Fast** | Quick responses, lower cost | Implementation, iteration |
 | **Standard** | Balanced speed/quality | Most tasks |
 | **Reasoning** | Extended thinking, slower | Planning, debugging, architecture |
-| **Long-context** | >100k tokens | Review, refactoring |
+| **Long-context (200k)** | Standard base | General coding |
+| **Long-context (500k)** | Larger codebase capacity | Multi-file features |
+| **Massive-context (1M+)** | Whole-codebase capacity | Review, major refactoring, inline execution |
 
 ---
 
@@ -99,9 +101,11 @@
 ## Model Switching Mid-Session
 
 **When to switch:**
-- Context is getting polluted (approaching 50%)
+- Context is getting polluted (approaching 50% for 200k, 70% for 1M)
 - Task type changes significantly (planning → implementation)
 - Current model struggling with task type
+
+> **Context Window Note:** With 1M context windows, switching specifically due to context pollution is rarely needed unless performing massive whole-project refactoring.
 
 **How to switch:**
 1. Create state snapshot

@@ -44,14 +44,14 @@
 | Markdown | 3 | ~300 tokens |
 | Sparse YAML | 2 | ~200 tokens |
 
-### By File Size
+### By File Size (Context-Window-Aware)
 
-| File Lines | Strategy |
-|------------|----------|
-| <50 | Load freely |
-| 50-200 | Outline first |
-| 200-500 | Search + snippets |
-| 500+ | Never load fully |
+| File Lines | Strategy (200k Default) | Strategy (1M Context) |
+|------------|-------------------------|-----------------------|
+| <50 | Load freely | Load freely |
+| 50-200 | Outline first | Load freely |
+| 200-500 | Search + snippets | Outline first |
+| 500+ | Never load fully | Search + snippets (load if necessary) |
 
 ---
 
@@ -161,7 +161,7 @@ GOOD:
 ### During Execution
 
 ```markdown
-□ Am I at >50%? Time to compress.
+□ Am I at DEGRADING threshold? Time to compress. (>50% for 200k, >70% for 1M)
 □ Am I re-reading files? Use summaries.
 □ Can I use outline instead of full file?
 ```
