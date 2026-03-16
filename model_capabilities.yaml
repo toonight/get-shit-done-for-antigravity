@@ -22,6 +22,13 @@ capabilities:
       - Better for large refactors
       - Full codebase reviews
     
+  context_window:
+    description: "Supported context window size. Defaults to 200k if not specified."
+    values:
+      - "200k: Standard base context window"
+      - "500k: Extended context window"
+      - "1M: Massive context window"
+    
   tools:
     description: "Function/tool calling support"
     benefits:
@@ -45,6 +52,7 @@ profiles:
     speed_tier: fast
     thinking_mode: false
     long_context: false
+    context_window: "200k"
     tools: true
     best_for:
       - Quick edits
@@ -59,6 +67,7 @@ profiles:
     speed_tier: standard
     thinking_mode: false
     long_context: true
+    context_window: "500k"
     tools: true
     best_for:
       - Most development tasks
@@ -73,6 +82,7 @@ profiles:
     speed_tier: reasoning
     thinking_mode: true
     long_context: true
+    context_window: "1M"
     tools: true
     best_for:
       - Architecture planning
@@ -103,6 +113,33 @@ phase_recommendations:
   review:
     preferred_profile: standard
     reason: "Large context for full diffs"
+
+# Context Window Adaptation Strategies
+context_strategy:
+  "200k":
+    execution: "Strict subagent spawning, fresh context per plan"
+    plan_atomicity: "2-3 tasks max per plan"
+    executor_context: "Minimal (PLAN.md + STATE.md only)"
+    thresholds:
+      good: 30
+      degrading: 50
+      poor: 70
+  "500k":
+    execution: "Inline execution supported for small phases"
+    plan_atomicity: "3-5 tasks per plan"
+    executor_context: "Moderate (load ARCHITECTURE.md + summaries)"
+    thresholds:
+      good: 40
+      degrading: 60
+      poor: 80
+  "1M":
+    execution: "Inline execution preferred when under 30% usage"
+    plan_atomicity: "5-8 tasks per plan"
+    executor_context: "Full phase context (SPEC.md + dependency code)"
+    thresholds:
+      good: 50
+      degrading: 70
+      poor: 85
 
 # IMPORTANT: This file is for guidance only.
 # Never fail a workflow because a specific model capability is missing.

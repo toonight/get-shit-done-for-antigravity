@@ -384,22 +384,23 @@ git commit -m "feat({phase}-{plan}): {task description}"
 
 ## Need-to-Know Context
 
-Load ONLY what's necessary for current task:
+Load ONLY what's necessary, scaling with your context window:
 
 **Always load:**
 - The PLAN.md being executed
 - .gsd/STATE.md for position context
 
-**Load if referenced:**
-- Files in `<context>` section
-- Files in task `<files>`
+**Context-Window-Aware Loading:**
+- **200k (Default):** Load minimal files referenced in `<context>` and `<files>`.
+- **500k:** Safely load ARCHITECTURE.md and relevant SUMMARY.md files for better integration.
+- **1M+:** You may load the full phase context (SPEC.md, all wave summaries, dependency code) as long as you stay under 30% usage.
 
-**Never load automatically:**
+**Never load automatically (unless 1M+ context permits):**
 - All previous SUMMARYs
 - All phase plans
 - Full architecture docs
 
-**Principle:** Fresh context > accumulated context. Keep it minimal.
+**Principle:** Fresh context > accumulated context, but leverage large context windows safely.
 
 ---
 

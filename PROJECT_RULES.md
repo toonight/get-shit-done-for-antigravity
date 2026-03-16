@@ -181,7 +181,7 @@ scripts/                  # Utility scripts
 
 ## Context Management
 
-**Context Quality Thresholds:**
+**Context Quality Thresholds (Baseline: 200k context):**
 
 | Usage | Quality |
 |-------|---------|
@@ -190,9 +190,11 @@ scripts/                  # Utility scripts
 | 50-70% | **DEGRADING** — Efficiency mode |
 | 70%+ | **POOR** — Rushed, incomplete |
 
+> **Context Window Scaling:** These percentages assume a 200k token baseline. With larger context windows (500k, 1M), quality remains stable at much higher percentages. See `model_capabilities.yaml` for context_window specific thresholds (e.g., 1M context remains GOOD up to 70%).
+
 **Context Hygiene Rules:**
-- Keep plans under 50% context usage
-- Fresh context for each plan execution
+- Keep plans under the "GOOD" threshold for your active context window
+- Fresh context for each plan execution (unless using inline mode for large contexts)
 - After 3 debugging failures → state dump → fresh session
 - STATE.md = memory across sessions
 
@@ -207,13 +209,13 @@ scripts/                  # Utility scripts
 | Action | Rule |
 |--------|------|
 | Before reading file | Search first (grep, ripgrep) |
-| File >200 lines | Use outline, not full file |
+| File >200 lines | Use outline, not full file (Relaxes to >500 lines with 1M context) |
 | File already understood | Reference summary, don't reload |
-| >5 files needed | Stop, reconsider approach |
+| >5 files needed | Stop, reconsider approach (Relaxes to >10 files with 1M context) |
 
-### Budget Thresholds
+### Budget Thresholds (200k Baseline)
 
-| Usage | Action Required |
+| Usage | Action Required (Adjust safely for 500k/1M contexts) |
 |-------|-----------------|
 | 0-50% | Proceed normally |
 | 50-70% | Switch to outline mode, compress context |

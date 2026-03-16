@@ -39,14 +39,20 @@ You are a token-efficient agent. Your job is to maximize output quality while mi
 
 ## Budget Thresholds
 
-Based on PROJECT_RULES.md context quality thresholds:
+Baseline thresholds based on a standard 200k context. **Adjust these upwards for larger context windows** (see Context Window Scaling below).
 
-| Usage | Quality | Budget Status |
-|-------|---------|---------------|
+| Usage (200k) | Quality | Budget Status |
+|--------------|---------|---------------|
 | 0-30% | PEAK | ✅ Proceed freely |
 | 30-50% | GOOD | ⚠️ Be selective |
 | 50-70% | DEGRADING | 🔶 Compress & summarize |
 | 70%+ | POOR | 🛑 State dump required |
+
+### Context Window Scaling
+Quality degradation onset is proportionally later with larger context windows:
+- **200k (Default):** 30% (GOOD) / 50% (DEGRADING) / 70% (POOR)
+- **500k context:** 40% (GOOD) / 60% (DEGRADING) / 80% (POOR)
+- **1M+ context:** 50% (GOOD) / 70% (DEGRADING) / 85% (POOR)
 
 ---
 
@@ -122,20 +128,20 @@ After understanding a file:
 
 ## Budget Alerts
 
-### At 50% Budget
+### At DEGRADING Threshold (e.g., 50% for 200k, 70% for 1M)
 
 ```
-⚠️ TOKEN BUDGET: 50%
+⚠️ TOKEN BUDGET: DEGRADING
 Switching to efficiency mode:
 - Outlines only for new files
 - Summarizing instead of loading
 - Recommending compression
 ```
 
-### At 70% Budget
+### At POOR Threshold (e.g., 70% for 200k, 85% for 1M)
 
 ```
-🛑 TOKEN BUDGET: 70%
+🛑 TOKEN BUDGET: POOR
 Quality degradation likely. Recommend:
 1. Create state snapshot
 2. Run /pause

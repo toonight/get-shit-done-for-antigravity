@@ -53,7 +53,7 @@ PLAN.md IS the prompt. It contains:
 - Tasks (with verification criteria)
 - Success criteria (measurable)
 
-## Quality Degradation Curve
+## Quality Degradation Curve (200k Baseline)
 
 | Context Usage | Quality | State |
 |---------------|---------|-------|
@@ -62,10 +62,13 @@ PLAN.md IS the prompt. It contains:
 | 50-70% | DEGRADING | Efficiency mode begins |
 | 70%+ | POOR | Rushed, minimal |
 
-**The rule:** Plans should complete within ~50% context. More plans, smaller scope.
+**The rule:** Plans should complete within ~50% of your **effective** context window. More plans, smaller scope. (Note: 1M context windows degrade much slower).
 
-## Aggressive Atomicity
-Each plan: **2-3 tasks max**. No exceptions.
+## Context-Aware Atomicity
+Task limits scale with your context window:
+- **200k (Default):** **2-3 tasks max**. No exceptions.
+- **500k context:** 3-5 tasks.
+- **1M+ context:** 5-8 tasks.
 
 </philosophy>
 
