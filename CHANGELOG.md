@@ -22,7 +22,9 @@ All notable changes to GSD for Antigravity.
 - **Workspace isolation for waves** — plans sharing a wave run in isolated git worktrees (`branch` mode), merged when the wave closes
 - **Delegation rule** in PROJECT_RULES.md
 - `validate-agents.ps1/.sh` — validates subagent definitions, including that referenced skills actually exist; wired into `validate-all`
-- DECISION-001 in `.gsd/DECISIONS.md` documenting the trade-offs
+- **Explicit `tools:` grants** on every subagent — the field defaults to an empty list and does not inherit the parent's toolset, so subagents without it can read and explore but cannot write their own artifact
+- `validate-agents` rejects a subagent with no `tools:` and any tool name outside the documented registry — a misspelled name makes a subagent hang rather than fail
+- Return Contracts now require `status: blocked` when a capability is missing, and forbid sending file contents to the parent as a substitute for writing to disk
 
 ### Changed
 - `/execute` delegates one `gsd-executor` per plan and routes on compact result blocks instead of executing inline
@@ -30,11 +32,13 @@ All notable changes to GSD for Antigravity.
 - `/verify` delegates to `gsd-verifier` — verification now runs on a context that never saw the implementation, which changes the result and not just the token count
 - `/map` and `/research-phase` delegate discovery to `gsd-researcher`
 - `/debug` delegates to `gsd-debugger`, especially when the calling context has already failed to fix the issue
-- ARCHITECTURE.md gained a subagent layer; component counts corrected (27 workflows, 12 skills, 5 subagents)
 - README documents subagent delegation and the Antigravity 2.0+ requirement
 
 ### Fixed
 - **Documentation described subagents that were never spawned** — `/execute` claimed to "spawn focused execution for each plan" with "fresh context per plan execution", `/plan` explained "why subagents", and the executor skill opened with "you are spawned by /execute". None of it was wired to anything; every phase ran in one context window until it was exhausted (#15)
+
+### Notes
+- `.gsd/ARCHITECTURE.md` and `.gsd/DECISIONS.md` are gitignored project state, not shipped template files. The design rationale for delegation lives in `.agents/skills/subagent-delegation/SKILL.md`
 
 ### Compatibility
 - Requires Antigravity **2.0+** for delegation. On 1.x, workflows announce degraded mode and run inline — one plan per session, `/pause` between plans

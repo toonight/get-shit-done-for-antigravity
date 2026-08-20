@@ -56,6 +56,37 @@ foreach ($agent in $agents) {
         $hasErrors = $true
     }
 
+    # Known Antigravity tool registry (antigravity.google/docs/hooks)
+    # An unmapped or misspelled tool name makes the subagent hang, so this is an error.
+    $knownTools = @(
+        "view_file", "write_to_file", "replace_file_content", "multi_replace_file_content",
+        "list_dir", "find_by_name", "grep_search", "search_web", "read_url_content",
+        "run_command", "manage_task", "schedule", "list_permissions", "ask_permission",
+        "invoke_subagent", "define_subagent", "send_message", "manage_subagents",
+        "ask_question", "generate_image"
+    )
+
+    # tools: must be declared - the field defaults to an empty list, it does NOT inherit
+    $declaredTools = @()
+    if ($content -match "(?ms)^tools:[ \t]*\r?\n((?:[ \t]+-[ \t]*\S+[ \t]*\r?\n)+)") {
+        $declaredTools = @([regex]::Matches($Matches[1], "(?m)^[ \t]*-[ \t]*(\S+)") |
+            ForEach-Object { $_.Groups[1].Value })
+    }
+
+    if ($declaredTools.Count -eq 0) {
+        Write-Host "❌ ${agentName}: No tools declared (tools: defaults to empty, it does not inherit)" -ForegroundColor Red
+        $ErrorCount++
+        $hasErrors = $true
+    } else {
+        foreach ($tool in $declaredTools) {
+            if (($knownTools -notcontains $tool) -and ($tool -notlike "browser_*")) {
+                Write-Host "❌ ${agentName}: Unknown tool '$tool' (typos make subagents hang)" -ForegroundColor Red
+                $ErrorCount++
+                $hasErrors = $true
+            }
+        }
+    }
+
     # Referenced skills must exist
     $skillRefs = [regex]::Matches($content, "(?m)^\s+-\s*(skills/[a-z0-9-]+)")
     foreach ($ref in $skillRefs) {

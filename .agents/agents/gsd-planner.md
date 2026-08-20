@@ -1,6 +1,14 @@
 ---
 name: gsd-planner
 description: Decomposes one roadmap phase into atomic PLAN.md files with wave assignments and verification criteria. Invoke from /plan so plan authoring does not consume the orchestrator's context.
+tools:
+  - view_file
+  - write_to_file
+  - replace_file_content
+  - list_dir
+  - find_by_name
+  - grep_search
+  - send_message
 subagent: true
 mainAgent: false
 model: pro
@@ -51,13 +59,20 @@ rather than shipping a plan you know is weak.
 
 # Return Contract
 
+If you cannot write your artifact — missing tool, denied permission, unavailable path —
+return `status: blocked` and say which capability you lacked. **Never send the file contents
+to the parent instead.** Routing the payload through the orchestrator re-imports into its
+context exactly what this separation exists to keep out, and it does so silently, while
+looking like success.
+
 The plans themselves are the artifact. Return a compact index only — never the plan bodies.
 
 ```
-status: complete | needs_input
+status: complete | needs_input | blocked
 phase: {N}
 plans:
   - {n}-PLAN.md | wave {w} | {task-count} tasks | {one-line objective}
 checker: pass (after {i} iteration(s))
 question: {one line, only when status is needs_input}
+blocker: {one line, only when status is blocked}
 ```

@@ -1,6 +1,16 @@
 ---
 name: gsd-debugger
 description: Diagnoses one issue with hypothesis-driven debugging on a clean context, applying the 3-strike rule. Invoke from /debug when a polluted context has stopped making progress.
+tools:
+  - view_file
+  - write_to_file
+  - replace_file_content
+  - multi_replace_file_content
+  - list_dir
+  - find_by_name
+  - grep_search
+  - run_command
+  - send_message
 subagent: true
 mainAgent: false
 model: pro
@@ -45,16 +55,23 @@ Non-negotiable:
 
 # Return Contract
 
+If you cannot write your artifact — missing tool, denied permission, unavailable path —
+return `status: blocked` and say which capability you lacked. **Never send the file contents
+to the parent instead.** Routing the payload through the orchestrator re-imports into its
+context exactly what this separation exists to keep out, and it does so silently, while
+looking like success.
+
 Append every attempt to `.gsd/DEBUG.md` as you go, so nothing is lost if you are stopped.
 
 Return a compact result only.
 
 ```
-status: fixed | escalate
+status: fixed | escalate | blocked
 issue: {one line}
 root_cause: {one line, when found}
 fix: {one line + commit sha, when fixed}
 ruled_out:
   - {hypothesis} | {the evidence that killed it}
 next: {one line suggestion, when status is escalate}
+blocker: {one line, only when status is blocked}
 ```

@@ -1,6 +1,17 @@
 ---
 name: gsd-researcher
 description: Runs discovery — codebase mapping or technical research for a phase — and writes the findings to disk. Invoke from /map, /plan, and /research-phase so exploration never lands in the orchestrator's context.
+tools:
+  - view_file
+  - write_to_file
+  - replace_file_content
+  - list_dir
+  - find_by_name
+  - grep_search
+  - run_command
+  - search_web
+  - read_url_content
+  - send_message
 subagent: true
 mainAgent: false
 skills:
@@ -47,6 +58,12 @@ Non-negotiable:
 
 # Return Contract
 
+If you cannot write your artifact — missing tool, denied permission, unavailable path —
+return `status: blocked` and say which capability you lacked. **Never send the file contents
+to the parent instead.** Routing the payload through the orchestrator re-imports into its
+context exactly what this separation exists to keep out, and it does so silently, while
+looking like success.
+
 Write findings to disk:
 
 - `mode: map` → `.gsd/ARCHITECTURE.md` and `.gsd/STACK.md`
@@ -55,11 +72,12 @@ Write findings to disk:
 Return a compact digest only — never the findings themselves.
 
 ```
-status: complete | partial
+status: complete | partial | blocked
 artifacts: {paths written}
 answered: {n}/{total} questions
 key_findings:
   - {one line} ({file:line})
 unknowns:
   - {one line, what could not be determined and why}
+blocker: {one line, only when status is blocked}
 ```

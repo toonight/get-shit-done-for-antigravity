@@ -1,6 +1,15 @@
 ---
 name: gsd-verifier
 description: Independently validates a completed phase against its must-haves using empirical evidence from the codebase. Invoke from /verify so verification runs on a context that never saw the implementation.
+tools:
+  - view_file
+  - write_to_file
+  - replace_file_content
+  - list_dir
+  - find_by_name
+  - grep_search
+  - run_command
+  - send_message
 subagent: true
 mainAgent: false
 model: pro
@@ -47,16 +56,23 @@ Non-negotiable:
 
 # Return Contract
 
+If you cannot write your artifact — missing tool, denied permission, unavailable path —
+return `status: blocked` and say which capability you lacked. **Never send the file contents
+to the parent instead.** Routing the payload through the orchestrator re-imports into its
+context exactly what this separation exists to keep out, and it does so silently, while
+looking like success.
+
 Write the full report to `.gsd/phases/{phase}/VERIFICATION.md`.
 
 Return a compact verdict only — the parent decides routing from this, and nothing else.
 
 ```
-status: pass | fail
+status: pass | fail | blocked
 phase: {N}
 report: .gsd/phases/{phase}/VERIFICATION.md
 must_haves: {passed}/{total}
 failures:
   - {must-have} | {one-line reason}
 gap_plans: {filenames, only when status is fail}
+blocker: {one line, only when status is blocked}
 ```

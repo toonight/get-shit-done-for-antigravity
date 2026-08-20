@@ -72,6 +72,30 @@ cost and desynchronizes it from disk the moment anything changes.
 
 ---
 
+## Tool Grants
+
+**`tools:` defaults to an empty list — it does not inherit the parent's toolset.** A subagent
+whose definition omits `tools:` cannot write files. It will explore happily, then discover at
+the end that it has no way to produce its artifact.
+
+Every subagent definition in `.agents/agents/` therefore declares its tools explicitly.
+
+| Need | Tools |
+|------|-------|
+| Read and search | `view_file`, `list_dir`, `find_by_name`, `grep_search` |
+| Write artifacts | `write_to_file`, `replace_file_content`, `multi_replace_file_content` |
+| Commits, tests, verification commands | `run_command` |
+| External research | `search_web`, `read_url_content` |
+| Return to the parent | `send_message` |
+
+**Copy tool names exactly.** An unmapped or misspelled name makes the subagent hang rather
+than fail — the worst possible failure mode, because it looks like slow work.
+
+`scripts/validate-agents.ps1/.sh` enforces both rules: `tools:` must be present and non-empty,
+and every declared name must exist in the registry above.
+
+---
+
 ## Workspace Isolation
 
 | Mode | Use when |
@@ -99,6 +123,10 @@ A subagent returns its compact block. That block is what enters your context —
 - **A dead subagent is not a completed one.** If a subagent returns nothing or dies, report
   it as a failure and stop. Do not silently redo its work inline — that is precisely the
   context blow-up delegation exists to prevent.
+- **A subagent that returns file contents has failed, however complete it sounds.** The
+  contract is a path; a payload means the artifact never reached disk. Treat it as `blocked`,
+  find out which capability it lacked, and fix the definition — do not paste the content
+  onward, or the delegation cost you tokens and bought you nothing.
 
 Depth is capped at 10 levels of nesting. GSD never needs more than 2 — orchestrator to
 subagent. A subagent that wants to delegate should return `needs_input` instead.

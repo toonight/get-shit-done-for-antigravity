@@ -1,6 +1,16 @@
 ---
 name: gsd-executor
 description: Executes exactly one GSD PLAN.md with atomic per-task commits, deviation handling, and a SUMMARY.md artifact. Invoke once per plan so every plan execution starts from a clean context.
+tools:
+  - view_file
+  - write_to_file
+  - replace_file_content
+  - multi_replace_file_content
+  - list_dir
+  - find_by_name
+  - grep_search
+  - run_command
+  - send_message
 subagent: true
 mainAgent: false
 model: pro
@@ -51,6 +61,12 @@ Non-negotiable:
   under "Deferred", not into your diff.
 
 # Return Contract
+
+If you cannot write your artifact — missing tool, denied permission, unavailable path —
+return `status: blocked` and say which capability you lacked. **Never send the file contents
+to the parent instead.** Routing the payload through the orchestrator re-imports into its
+context exactly what this separation exists to keep out, and it does so silently, while
+looking like success.
 
 Write the full narrative to `.gsd/phases/{phase}/{n}-SUMMARY.md`.
 
