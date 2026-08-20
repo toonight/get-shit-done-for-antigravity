@@ -17,6 +17,9 @@ Systematically diagnose an issue using hypothesis-driven debugging, with persist
 **Issue:** $ARGUMENTS (description of the problem to debug)
 
 **Skill reference:** `.agents/skills/debugger/SKILL.md`
+
+**Delegation protocol:** `.agents/skills/subagent-delegation/SKILL.md`
+**Subagent:** `.agents/agents/gsd-debugger.md`
 </context>
 
 <process>
@@ -44,6 +47,30 @@ Display banner:
 
 Issue: {description}
 ```
+
+---
+
+## 1b. Delegate to a Fresh Debugger
+
+**If `invoke_subagent` is available**, invoke `gsd-debugger` with workspace mode `inherit`:
+
+```
+issue: {description}
+debug_state: .gsd/DEBUG.md   {omit if this is a new session}
+
+Reproduce before diagnosing. One hypothesis at a time. 3 strikes then escalate.
+Append attempts to .gsd/DEBUG.md as you go.
+Return the compact result from your Return Contract — nothing else.
+```
+
+Delegate especially when **this** context has already tried to fix the issue. A context that
+has failed three times keeps generating variants of its own failed hypotheses; a clean one
+does not. That is the entire reason this subagent exists.
+
+On `status: fixed` → skip to step 8. On `status: escalate` → go to step 7 with the
+`ruled_out` list the subagent returned.
+
+Steps 2-7 describe what the debugger does. Run them yourself only in inline mode.
 
 ---
 

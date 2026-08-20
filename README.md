@@ -6,7 +6,7 @@
 
 <br/>
 
-[![Version](https://img.shields.io/badge/version-1.5.0-00C853?style=flat-square)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.6.0-00C853?style=flat-square)](CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-MIT-2196F3?style=flat-square)](LICENSE)
 [![Based on GSD](https://img.shields.io/badge/based%20on-GSD-7B2D8E?style=flat-square)](https://github.com/glittercowboy/get-shit-done)
 [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20Mac-FF6D00?style=flat-square)](#-cross-platform-support)
@@ -80,6 +80,10 @@ GSD fixes that. It's the **context engineering layer** that makes AI coding reli
 ---
 
 ## ⚡ Getting Started
+
+> **Requirements:** Antigravity **2.0+** for [subagent delegation](#-subagent-delegation).
+> GSD runs on 1.x too — every command works, but everything shares one context window and
+> workflows will tell you so.
 
 <details>
 <summary><b>🪟 PowerShell (Windows)</b></summary>
@@ -195,6 +199,37 @@ The AI is incredibly powerful **if** you give it the context it needs. Most peop
 
 > Size limits based on where AI quality degrades. Stay under, get consistent excellence.
 
+### 🧬 Subagent Delegation
+
+Context engineering only works if something actually protects the context. In GSD, that
+something is **native Antigravity subagents**: workflows orchestrate and route, subagents do
+the work — each on its own clean context window.
+
+```
+/execute 2
+    │
+    ├─ wave 1 ──► gsd-executor  (plan 1)  ──► SUMMARY.md ──┐
+    │             gsd-executor  (plan 2)  ──► SUMMARY.md ──┤ compact
+    │                                                       │ results
+    └─ verify ──► gsd-verifier            ──► VERIFICATION ─┘ only
+```
+
+| Subagent | Runs | Why it's isolated |
+|----------|------|-------------------|
+| 🧠 `gsd-planner` | `/plan` | Planning reads spec + roadmap + research |
+| ⚙️ `gsd-executor` | `/execute`, one per plan | Every plan starts at peak quality |
+| 🔬 `gsd-verifier` | `/verify` | It never saw the code written — so it can audit it |
+| 🔎 `gsd-researcher` | `/map`, `/research-phase` | Exploration is the biggest context cost |
+| 🐛 `gsd-debugger` | `/debug` | A context that failed 3× repeats its own hypotheses |
+
+Subagents inherit **no** conversation history and return a compact result block — status,
+artifact paths, verdict. The artifacts land on disk; only the block reaches the orchestrator.
+
+> **Requires Antigravity 2.0+** (`invoke_subagent`). On 1.x, workflows announce degraded mode
+> and run inline — one plan per session, `/pause` between plans.
+>
+> Protocol: [subagent-delegation](.agents/skills/subagent-delegation/SKILL.md) · Definitions: [.agents/agents/](.agents/agents/)
+
 ### 🏷️ XML Prompt Formatting
 
 Every plan is structured XML optimized for AI execution:
@@ -244,7 +279,9 @@ graph TD
     style T6 fill:#7B2D8E,color:#fff,stroke:none
 ```
 
-Each executor gets **fresh context**. Your main session stays fast.
+Each plan runs in its own `gsd-executor` subagent, so each executor gets **fresh context** and
+your main session stays fast. Plans sharing a wave run in isolated git worktrees
+(`branch` mode) and merge when the wave closes.
 
 ### 🔗 Atomic Git Commits
 
@@ -483,7 +520,8 @@ adapters/
 └── 📂 workflows/            # 27 slash commands
 
 📂 .agents/
-└── 📂 skills/               # 11 agent specializations (Agent Skills standard)
+├── 📂 agents/               # 5 subagent definitions (invoke_subagent)
+└── 📂 skills/               # 12 agent specializations (Agent Skills standard)
 
 📂 .gemini/
 └── 📄 GEMINI.md             # Gemini integration
@@ -530,6 +568,7 @@ Run validation scripts to verify GSD structure:
 .\scripts\validate-all.ps1        # Run all validators
 .\scripts\validate-workflows.ps1  # Workflows only
 .\scripts\validate-skills.ps1     # Skills only
+.\scripts\validate-agents.ps1     # Subagents only
 .\scripts\validate-encoding.ps1   # Script encoding only
 ```
 
@@ -542,6 +581,7 @@ Run validation scripts to verify GSD structure:
 ./scripts/validate-all.sh         # Run all validators
 ./scripts/validate-workflows.sh   # Workflows only
 ./scripts/validate-skills.sh      # Skills only
+./scripts/validate-agents.sh      # Subagents only
 ./scripts/validate-encoding.sh    # Script encoding only
 ```
 
@@ -558,6 +598,7 @@ Run validation scripts to verify GSD structure:
 | [Model Selection Playbook](docs/model-selection-playbook.md) | Model selection guidance |
 | [Runbook](docs/runbook.md) | Operational procedures |
 | [Token Optimization Guide](docs/token-optimization-guide.md) | Token efficiency strategies |
+| [Subagent Delegation](.agents/skills/subagent-delegation/SKILL.md) | When and how workflows delegate to subagents |
 | [Examples](.gsd/examples/) | Usage walkthroughs and quick reference |
 | [Templates](.gsd/templates/) | Document templates for plans, verification |
 

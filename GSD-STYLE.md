@@ -140,10 +140,12 @@ Every sentence should convey information. Remove words that don't add meaning.
 
 ### Fresh Context Pattern
 
-When spawning subprocesses (plans, tasks), they get:
-- The specific plan being executed
+Work is delegated to subagents (`.agents/agents/`) via `invoke_subagent`. Each one gets:
+- The specific plan being executed, **by path**
 - Minimal necessary context from parent files
-- NO accumulated orchestrator state
+- NO accumulated orchestrator state — a subagent does not inherit conversation history
+
+In return, it gives back a compact result block, not its working material.
 
 ### State Preservation
 

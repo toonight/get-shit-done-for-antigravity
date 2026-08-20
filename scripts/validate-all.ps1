@@ -43,6 +43,7 @@ Write-Host ""
 
 if (-not (Invoke-Validator "workflow validation" "validate-workflows.ps1")) { $TotalErrors++ }
 if (-not (Invoke-Validator "skill validation" "validate-skills.ps1")) { $TotalErrors++ }
+if (-not (Invoke-Validator "subagent validation" "validate-agents.ps1")) { $TotalErrors++ }
 if (-not (Invoke-Validator "template validation" "validate-templates.ps1")) { $TotalErrors++ }
 if (-not (Invoke-Validator "script encoding validation" "validate-encoding.ps1")) { $TotalErrors++ }
 

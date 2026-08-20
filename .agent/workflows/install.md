@@ -148,7 +148,7 @@ GSD for Antigravity has been installed.
 
 Files installed:
 • .agent/        (workflows)
-• .agents/       (skills — Agent Skills standard)
+• .agents/       (subagents + skills — Agent Skills standard)
 • .gemini/       (Gemini integration)
 • .gsd/          (project state templates)
 • adapters/      (model-specific enhancements)

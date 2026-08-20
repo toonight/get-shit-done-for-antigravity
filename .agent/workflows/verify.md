@@ -31,9 +31,35 @@ The verifier checks the CODEBASE, not SUMMARY claims.
 - `.gsd/SPEC.md` — Original requirements
 - `.gsd/ROADMAP.md` — Phase definition with must-haves
 - `.gsd/phases/{phase}/*-SUMMARY.md` — What was implemented
+
+**Delegation protocol:** `.agents/skills/subagent-delegation/SKILL.md`
+**Subagent:** `.agents/agents/gsd-verifier.md`
 </context>
 
 <process>
+
+## 0. Delegate to a Fresh Verifier
+
+**If `invoke_subagent` is available**, do not verify in this context. Invoke `gsd-verifier`
+with workspace mode `share`:
+
+```
+phase: {N}
+
+Verify against the codebase, not the SUMMARY claims. Run every command.
+Write .gsd/phases/{phase}/VERIFICATION.md.
+Return the compact verdict from your Return Contract — nothing else.
+```
+
+This is the one workflow where delegation changes the **result**, not just the cost. A
+context that watched the code get written already believes it works. Route on the returned
+verdict and skip to step 5 (Handle Results).
+
+Steps 1-4 describe what the verifier does. Run them yourself only in inline mode
+(Antigravity 1.x), where you should first warn the user that the verification is not
+independent.
+
+---
 
 ## 1. Load Verification Context
 

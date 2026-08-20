@@ -23,6 +23,12 @@ echo "▶ Running skill validation..."
 if [ $? -ne 0 ]; then ((total_errors++)); fi
 echo ""
 
+# Run subagent validator
+echo "▶ Running subagent validation..."
+"$script_dir/validate-agents.sh"
+if [ $? -ne 0 ]; then ((total_errors++)); fi
+echo ""
+
 # Run template validator
 echo "▶ Running template validation..."
 "$script_dir/validate-templates.sh"

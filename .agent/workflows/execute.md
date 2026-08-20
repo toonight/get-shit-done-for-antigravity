@@ -6,22 +6,24 @@ argument-hint: "<phase-number> [--gaps-only]"
 # /execute Workflow
 
 <role>
-You are a GSD executor orchestrator. You manage wave-based parallel execution of phase plans.
+You are a GSD executor orchestrator. You do not execute plans yourself — you delegate each
+plan to a `gsd-executor` subagent and route the results.
 
 **Core responsibilities:**
 - Validate phase exists and has plans
 - Discover and group plans by execution wave
-- Spawn focused execution for each plan
+- Delegate each plan to a `gsd-executor` subagent with a clean context
 - Verify phase goal after all plans complete
 - Update roadmap and state on completion
 </role>
 
 <objective>
-Execute all plans in a phase using wave-based parallel execution.
+Execute all plans in a phase using wave-based execution, one subagent per plan.
 
-Orchestrator stays lean: discover plans, analyze dependencies, group into waves, execute sequentially within waves, verify against phase goal.
+Orchestrator stays lean: discover plans, analyze dependencies, group into waves, delegate,
+read compact results, verify against phase goal.
 
-**Context budget:** ~15% orchestrator, fresh context per plan execution.
+**Context budget:** ~15% orchestrator. Each plan executes in its own subagent context.
 </objective>
 
 <context>
@@ -29,11 +31,15 @@ Orchestrator stays lean: discover plans, analyze dependencies, group into waves,
 
 **Flags:**
 - `--gaps-only` — Execute only gap closure plans (created by `/verify` when issues found)
+- `--inline` — Force inline execution without subagents (debugging escape hatch)
 
 **Required files:**
 - `.gsd/ROADMAP.md` — Phase definitions
 - `.gsd/STATE.md` — Current position
 - `.gsd/phases/{phase}/` — Phase directory with PLAN.md files
+
+**Delegation protocol:** `.agents/skills/subagent-delegation/SKILL.md`
+**Subagent:** `.agents/agents/gsd-executor.md`
 </context>
 
 <process>
@@ -154,10 +160,80 @@ Wave 2: {plan-3}
 
 ## 6. Execute Waves
 
-For each wave in order:
+### 6a. Check Delegation Capability
 
-### 6a. Execute Plans in Wave
-For each plan in the current wave:
+Look for `invoke_subagent` in your available tools.
+
+| Result | Path |
+|--------|------|
+| Available, and no `--inline` flag | **Delegated mode** — 6b |
+| Unavailable, or `--inline` passed | **Inline mode** — 6e |
+
+---
+
+### 6b. Delegate Each Plan in the Wave
+
+For each wave in order, invoke one `gsd-executor` subagent per plan.
+
+**Workspace mode:**
+
+| Plans in wave | Mode | Reason |
+|---------------|------|--------|
+| 1 | `inherit` | Nothing to collide with |
+| 2+ | `branch` | Concurrent writers need isolated worktrees |
+
+**Invocation prompt** — paths only, never file contents:
+
+```
+plan_path: .gsd/phases/{phase}/{n}-PLAN.md
+phase: {N}
+completed_tasks: {only on continuation, from a prior checkpoint}
+
+Read .gsd/STATE.md and PROJECT_RULES.md first.
+Execute this plan only. Commit per task. Write your SUMMARY.md.
+Return the compact block from your Return Contract — nothing else.
+```
+
+Constraints from `.gsd/STATE.md` that bound the work (accepted decisions, known blockers)
+go in the prompt as plain lines. The subagent cannot see this conversation.
+
+See `.agents/skills/subagent-delegation/SKILL.md` for the full protocol.
+
+---
+
+### 6c. Route Each Result
+
+Each subagent returns a compact block. **Do not read the SUMMARY.md files** — the block is
+enough to route, and reading them re-imports the context delegation just saved.
+
+| `status` | Action |
+|----------|--------|
+| `complete` | Record commits, continue |
+| `checkpoint` | Present the checkpoint to the user, stop the wave, resume with a fresh subagent carrying `completed_tasks` |
+| `blocked` | Report the blocker, stop the wave, do not start the next one |
+| no result / subagent died | Report as failure and stop — do not silently redo the work inline |
+
+---
+
+### 6d. Close the Wave
+
+1. If the wave ran in `branch` mode, merge each worktree back and resolve conflicts
+2. Confirm every plan in the wave has a SUMMARY.md on disk
+3. Only then start the next wave
+
+---
+
+### 6e. Inline Fallback (Antigravity 1.x)
+
+Announce degraded mode once:
+
+```
+⚠️  Subagent delegation unavailable (requires Antigravity 2.0+)
+    Running inline — context will fill faster.
+    Recommended: one plan per session, /pause between plans.
+```
+
+Then, for **one plan only** — never a full wave:
 
 1. **Load plan context** — Read only the PLAN.md file
 2. **Execute tasks** — Follow `<task>` blocks in order
@@ -168,18 +244,21 @@ For each plan in the current wave:
    git commit -m "feat(phase-{N}): {task-name}"
    ```
 5. **Create SUMMARY.md** — Document what was done
-
-### 6b. Verify Wave Complete
-Check all plans in wave have SUMMARY.md files.
-
-### 6c. Proceed to Next Wave
-Only after current wave fully completes.
+6. **Stop and offer `/pause`** so the next plan starts on a fresh context
 
 ---
 
 ## 7. Verify Phase Goal
 
-After all waves complete:
+After all waves complete.
+
+**Delegated mode:** invoke `gsd-verifier` with `phase: {N}` and workspace mode `share`. It
+returns a compact verdict. Skip to "Route by verdict" — the orchestrator does not re-verify.
+
+The verifier's independence is the point: it never saw the implementation, so it cannot
+inherit the executors' assumptions about their own work.
+
+**Inline mode:**
 
 1. **Read phase goal** from ROADMAP.md
 2. **Check must-haves** against actual codebase (not SUMMARY claims)

@@ -55,6 +55,32 @@ Every change requires verification evidence:
 
 ---
 
+## Delegation
+
+**Rule:** Orchestrator workflows delegate the work and keep the routing.
+
+Where `invoke_subagent` exists (Antigravity 2.0+), heavy work runs in a subagent with its own
+context. The orchestrator reads compact results only.
+
+| Work | Subagent |
+|------|----------|
+| Plan execution | `gsd-executor` (one per PLAN.md) |
+| Plan authoring | `gsd-planner` |
+| Phase verification | `gsd-verifier` |
+| Mapping and research | `gsd-researcher` |
+| Bug diagnosis | `gsd-debugger` |
+
+**Non-negotiable:**
+- A subagent inherits **no** conversation history — put every needed fact in its prompt
+- Pass **paths**, never file contents
+- Never re-read an artifact a subagent already summarized just to confirm it
+- Where subagents are unavailable, say so out loud and degrade to one plan per session —
+  never claim delegation that did not happen
+
+Full protocol: `.agents/skills/subagent-delegation/SKILL.md`
+
+---
+
 ## Wave Execution
 
 Plans are grouped into **waves** based on dependencies:
@@ -64,6 +90,11 @@ Plans are grouped into **waves** based on dependencies:
 | 1 | Foundation tasks, no dependencies | Run in parallel |
 | 2 | Depends on Wave 1 | Wait for Wave 1, then parallel |
 | 3 | Depends on Wave 2 | Wait for Wave 2, then parallel |
+
+**Parallelism is real only with subagents.** A wave with multiple plans runs one
+`gsd-executor` per plan in `branch` workspace mode (isolated git worktrees), merged when the
+wave closes. Without subagents, a "wave" degrades to sequential execution in one context —
+plan it as such.
 
 **Wave Completion Protocol:**
 1. All tasks in wave verified
@@ -164,6 +195,7 @@ GSD-STYLE.md              # Style and conventions
 └── workflows/            # Slash commands (/plan, /execute, etc.)
 
 .agents/
+├── agents/               # Subagent definitions (invoked via invoke_subagent)
 └── skills/               # Agent specializations (Agent Skills standard)
 
 .gemini/                  # Gemini-specific configuration
@@ -194,7 +226,8 @@ scripts/                  # Utility scripts
 
 **Context Hygiene Rules:**
 - Keep plans under 50% context usage
-- Fresh context for each plan execution
+- Fresh context for each plan execution — enforced by one `gsd-executor` subagent per plan,
+  not by hoping the orchestrator stays tidy
 - After 3 debugging failures → state dump → fresh session
 - STATE.md = memory across sessions
 

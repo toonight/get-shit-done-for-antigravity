@@ -13,6 +13,34 @@ All notable changes to GSD for Antigravity.
 
 ---
 
+## [1.6.0] - 2026-08-19
+
+### Added
+- **Native subagent delegation** — GSD workflows now delegate to Antigravity subagents via `invoke_subagent` instead of running everything in the main context window (closes #15)
+- **5 subagent definitions** in `.agents/agents/` — `gsd-planner`, `gsd-executor`, `gsd-verifier`, `gsd-researcher`, `gsd-debugger`, each equipped with existing skills through the `skills:` frontmatter field
+- **`subagent-delegation` skill** — canonical protocol covering what to delegate, invocation prompt contract, workspace isolation modes, result handling, and the inline fallback
+- **Workspace isolation for waves** — plans sharing a wave run in isolated git worktrees (`branch` mode), merged when the wave closes
+- **Delegation rule** in PROJECT_RULES.md
+- `validate-agents.ps1/.sh` — validates subagent definitions, including that referenced skills actually exist; wired into `validate-all`
+- DECISION-001 in `.gsd/DECISIONS.md` documenting the trade-offs
+
+### Changed
+- `/execute` delegates one `gsd-executor` per plan and routes on compact result blocks instead of executing inline
+- `/plan` delegates research to `gsd-researcher` and plan authoring to `gsd-planner`
+- `/verify` delegates to `gsd-verifier` — verification now runs on a context that never saw the implementation, which changes the result and not just the token count
+- `/map` and `/research-phase` delegate discovery to `gsd-researcher`
+- `/debug` delegates to `gsd-debugger`, especially when the calling context has already failed to fix the issue
+- ARCHITECTURE.md gained a subagent layer; component counts corrected (27 workflows, 12 skills, 5 subagents)
+- README documents subagent delegation and the Antigravity 2.0+ requirement
+
+### Fixed
+- **Documentation described subagents that were never spawned** — `/execute` claimed to "spawn focused execution for each plan" with "fresh context per plan execution", `/plan` explained "why subagents", and the executor skill opened with "you are spawned by /execute". None of it was wired to anything; every phase ran in one context window until it was exhausted (#15)
+
+### Compatibility
+- Requires Antigravity **2.0+** for delegation. On 1.x, workflows announce degraded mode and run inline — one plan per session, `/pause` between plans
+
+---
+
 ## [1.5.0] - 2026-04-01
 
 ### Breaking Changes

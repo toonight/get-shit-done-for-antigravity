@@ -21,7 +21,14 @@ Create executable phase prompts (PLAN.md files) for a roadmap phase with integra
 
 **Default flow:** Research (if needed) → Plan → Verify → Done
 
-**Why subagents:** Research and planning burn context fast. Verification uses fresh context. User sees the flow between agents in main context.
+**Why subagents:** Research and planning are the two heaviest context consumers in GSD —
+research reads the codebase, planning reads the spec, roadmap, and research on top of it.
+Both run in `gsd-researcher` / `gsd-planner` subagents so the orchestrator keeps the budget
+it needs to run the rest of the phase. You see the flow between agents; you do not pay for
+their reading.
+
+Requires Antigravity 2.0+ (`invoke_subagent`). Older versions run inline — see
+`.agents/skills/subagent-delegation/SKILL.md`.
 </objective>
 
 <context>
@@ -35,6 +42,9 @@ Create executable phase prompts (PLAN.md files) for a roadmap phase with integra
 **Required files:**
 - `.gsd/SPEC.md` — Must be FINALIZED (Planning Lock)
 - `.gsd/ROADMAP.md` — Must have phases defined
+
+**Delegation protocol:** `.agents/skills/subagent-delegation/SKILL.md`
+**Subagents:** `.agents/agents/gsd-researcher.md`, `.agents/agents/gsd-planner.md`
 </context>
 
 <philosophy>
@@ -208,9 +218,25 @@ Display banner:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-Perform research based on discovery level (see `<discovery_levels>`).
+**Delegated mode** (`invoke_subagent` available): invoke `gsd-researcher` with workspace mode
+`share`:
 
-Create `$PHASE_DIR/RESEARCH.md` with findings.
+```
+mode: research
+phase: {N}
+level: {1|2|3 from <discovery_levels>}
+questions:
+  - {question 1}
+  - {question 2}
+
+Write findings to .gsd/phases/{phase}/RESEARCH.md.
+Return the compact digest from your Return Contract — nothing else.
+```
+
+Read only the returned digest. The RESEARCH.md itself is for the planner to read, not you.
+
+**Inline mode:** perform research based on discovery level (see `<discovery_levels>`) and
+create `$PHASE_DIR/RESEARCH.md` with findings.
 
 ---
 
@@ -222,6 +248,24 @@ Display banner:
  GSD ► PLANNING PHASE {N}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+**Delegated mode** (`invoke_subagent` available): invoke `gsd-planner` with workspace mode
+`inherit`:
+
+```
+phase: {N}
+mode: {standard|gaps}
+research_path: .gsd/phases/{phase}/RESEARCH.md   {omit if none}
+
+Write plans from .gsd/templates/PLAN.md. 2-3 tasks each, wave + depends_on in frontmatter.
+Self-check with plan-checker before returning.
+Return the compact index from your Return Contract — nothing else.
+```
+
+The planner runs its own checker loop, so **skip step 7** when it returns `status: complete`.
+Steps 6a-6c below describe what the planner does; run them yourself only in inline mode.
+
+---
 
 ### 6a. Gather Context
 Load:

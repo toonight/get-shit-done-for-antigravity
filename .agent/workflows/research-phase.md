@@ -24,6 +24,30 @@ Conduct technical research to inform planning decisions for a phase.
 
 <process>
 
+## 0. Delegate the Research
+
+**If `invoke_subagent` is available**, invoke `gsd-researcher` with workspace mode `share`:
+
+```
+mode: research
+phase: {N}
+level: {1|2|3}
+questions:
+  - {question 1}
+  - {question 2}
+
+Write .gsd/phases/{phase}/RESEARCH.md. Cite findings with file:line.
+Return the compact digest from your Return Contract — nothing else.
+```
+
+Read the digest, not the RESEARCH.md. The planner will read the full document when it needs
+it — that is what it is for.
+
+Steps 1-4 describe what the researcher does. Run them yourself only in inline mode
+(Antigravity 1.x). See `.agents/skills/subagent-delegation/SKILL.md`.
+
+---
+
 ## 1. Load Phase Context
 
 Read:
