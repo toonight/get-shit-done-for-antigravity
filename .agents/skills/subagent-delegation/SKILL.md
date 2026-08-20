@@ -27,6 +27,10 @@ probe by calling it — a failed call wastes a turn and confuses the user.
 | `invoke_subagent` available | Delegate per this protocol |
 | Not available | Inline fallback (see below) |
 
+**Plan requirements:** none beyond 2.0. Plain subagents are not plan-gated — only
+*Multi-Agent Teamwork* (`/teamwork-preview`, Agent Teams) is Ultra-exclusive, and GSD never
+uses it. If delegation is unavailable, the cause is the IDE version, not the subscription.
+
 ---
 
 ## What to Delegate

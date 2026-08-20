@@ -228,6 +228,11 @@ artifact paths, verdict. The artifacts land on disk; only the block reaches the 
 > **Requires Antigravity 2.0+** (`invoke_subagent`). On 1.x, workflows announce degraded mode
 > and run inline — one plan per session, `/pause` between plans.
 >
+> **No Ultra plan required.** GSD uses plain subagents, which are not plan-gated — only
+> *Multi-Agent Teamwork* (`/teamwork-preview`, Agent Teams) is Ultra-exclusive, and GSD does
+> not use it. Free and Pro tiers differ in rate limits and model access, not in access to
+> delegation.
+>
 > Protocol: [subagent-delegation](.agents/skills/subagent-delegation/SKILL.md) · Definitions: [.agents/agents/](.agents/agents/)
 
 ### 🏷️ XML Prompt Formatting
