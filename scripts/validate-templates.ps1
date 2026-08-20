@@ -1,4 +1,4 @@
-# GSD Template Validation Script
+﻿# GSD Template Validation Script
 # Validates all template files in .gsd/templates/
 
 $ErrorCount = 0

@@ -1,4 +1,4 @@
-# setup_search.ps1 - Optional search tool setup for GSD
+﻿# setup_search.ps1 - Optional search tool setup for GSD
 #
 # This script checks for and provides guidance on installing search tools.
 # GSD works without these tools (falls back to Select-String), but they improve performance.

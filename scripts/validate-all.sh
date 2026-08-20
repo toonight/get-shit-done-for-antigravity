@@ -29,6 +29,12 @@ echo "▶ Running template validation..."
 if [ $? -ne 0 ]; then ((total_errors++)); fi
 echo ""
 
+# Run encoding validator
+echo "▶ Running script encoding validation..."
+"$script_dir/validate-encoding.sh"
+if [ $? -ne 0 ]; then ((total_errors++)); fi
+echo ""
+
 # Summary
 echo "╔═══════════════════════════════════════════════════════╗"
 echo "║                    SUMMARY                            ║"

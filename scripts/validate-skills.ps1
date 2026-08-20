@@ -1,4 +1,4 @@
-# GSD Skill Validation Script
+﻿# GSD Skill Validation Script
 # Validates all skill directories for required structure
 
 $ErrorCount = 0

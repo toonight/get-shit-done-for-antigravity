@@ -1,4 +1,4 @@
-# GSD Workflow Validation Script
+﻿# GSD Workflow Validation Script
 # Validates all workflow files for required structure
 
 $ErrorCount = 0

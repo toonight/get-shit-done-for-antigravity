@@ -530,6 +530,7 @@ Run validation scripts to verify GSD structure:
 .\scripts\validate-all.ps1        # Run all validators
 .\scripts\validate-workflows.ps1  # Workflows only
 .\scripts\validate-skills.ps1     # Skills only
+.\scripts\validate-encoding.ps1   # Script encoding only
 ```
 
 </details>
@@ -541,6 +542,7 @@ Run validation scripts to verify GSD structure:
 ./scripts/validate-all.sh         # Run all validators
 ./scripts/validate-workflows.sh   # Workflows only
 ./scripts/validate-skills.sh      # Skills only
+./scripts/validate-encoding.sh    # Script encoding only
 ```
 
 </details>

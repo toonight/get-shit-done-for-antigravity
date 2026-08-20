@@ -2,6 +2,17 @@
 
 All notable changes to GSD for Antigravity.
 
+## [Unreleased]
+
+### Fixed
+- **PowerShell validators could not run on Windows** — `.ps1` scripts containing emoji were stored as UTF-8 without a BOM, so Windows PowerShell 5.1 read them as the system ANSI codepage and failed to parse them entirely (`Le terminateur " est manquant dans la chaine`). `validate-skills`, `validate-templates` and `validate-workflows` were affected
+- **`validate-all.ps1` reported success when a child validator never ran** — a script that fails to launch leaves `$LASTEXITCODE` untouched, so the suite printed "All validators passed!" while nothing had been validated. This is why the encoding fault went unnoticed
+
+### Added
+- `validate-encoding.ps1/.sh` — parses every PowerShell script and checks that any script with non-ASCII characters carries a UTF-8 BOM; wired into `validate-all`
+
+---
+
 ## [1.5.0] - 2026-04-01
 
 ### Breaking Changes
