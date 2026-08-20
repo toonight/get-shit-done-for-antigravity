@@ -238,11 +238,24 @@ Then, for **one plan only** — never a full wave:
 1. **Load plan context** — Read only the PLAN.md file
 2. **Execute tasks** — Follow `<task>` blocks in order
 3. **Verify each task** — Run `<verify>` commands
-4. **Commit per task:**
+4. **Commit per task** — separate commands, never chained with `&&`:
+
+   **PowerShell:**
+   ```powershell
+   git add -A
+   git commit -m "feat(phase-{N}): {task-name}"
+   git log -1 --oneline
+   ```
+
+   **Bash:**
    ```bash
    git add -A
    git commit -m "feat(phase-{N}): {task-name}"
+   git log -1 --oneline
    ```
+
+   Read the `git log` output and confirm it names this task. A commit you did not verify did
+   not happen.
 5. **Create SUMMARY.md** — Document what was done
 6. **Stop and offer `/pause`** so the next plan starts on a fresh context
 

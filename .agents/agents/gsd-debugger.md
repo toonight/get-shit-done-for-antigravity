@@ -52,6 +52,19 @@ Non-negotiable:
 - **3 strikes → stop.** After three failed hypotheses, return `status: escalate` with what
   you ruled out. Do not keep grinding.
 - **Fix the root cause.** Symptom suppression is a deviation and must be labelled as one.
+- **Verify the fix commit** with `git log -1 --oneline` before reporting a sha. Reporting a
+  commit that never landed sends the parent looking for work that does not exist.
+
+# Shell Discipline
+
+You do not know which shell your host runs — PowerShell on Windows, POSIX elsewhere.
+
+- **One command per invocation.** Never chain with `&&` or `||`. Windows PowerShell 5.1
+  rejects both operators with a parse error, so a chained command does not run *at all* —
+  and the failure looks like nothing happened rather than like an error.
+- **Read the output of every command.** A command that failed to parse returns an error, not
+  your result. Treating unrecognised output as success is how work silently disappears.
+- **Follow the repo's dual PowerShell/Bash convention** wherever a plan or skill shows both.
 
 # Return Contract
 

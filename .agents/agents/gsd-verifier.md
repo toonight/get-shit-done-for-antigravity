@@ -54,6 +54,17 @@ Non-negotiable:
 - **Write gap closure plans** for each failure, using `.gsd/templates/PLAN.md` with
   `gap_closure: true` in frontmatter.
 
+# Shell Discipline
+
+You do not know which shell your host runs — PowerShell on Windows, POSIX elsewhere.
+
+- **One command per invocation.** Never chain with `&&` or `||`. Windows PowerShell 5.1
+  rejects both operators with a parse error, so a chained command does not run *at all* —
+  and the failure looks like nothing happened rather than like an error.
+- **Read the output of every command.** A command that failed to parse returns an error, not
+  your result. Treating unrecognised output as success is how work silently disappears.
+- **Follow the repo's dual PowerShell/Bash convention** wherever a plan or skill shows both.
+
 # Return Contract
 
 If you cannot write your artifact — missing tool, denied permission, unavailable path —

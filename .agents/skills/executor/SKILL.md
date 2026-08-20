@@ -366,12 +366,46 @@ If spawned as a continuation agent (prompt has completed tasks):
 
 ## Task Commit Protocol
 
-After each task completes:
+After each task completes, run these as **separate commands**, one per invocation:
 
+**PowerShell:**
 ```powershell
 git add -A
 git commit -m "feat({phase}-{plan}): {task description}"
+git log -1 --oneline
 ```
+
+**Bash:**
+```bash
+git add -A
+git commit -m "feat({phase}-{plan}): {task description}"
+git log -1 --oneline
+```
+
+**Never chain commands with `&&` or `||`.** You do not know which shell your host runs.
+Windows PowerShell 5.1 rejects both operators outright with a parse error, so a chained
+`git add ... && git commit ...` fails *silently as far as your reasoning is concerned* — you
+will believe you committed when nothing happened.
+
+### Confirm the commit landed
+
+The third command is not decoration. Read its output and check it names the task you just
+committed.
+
+**If the commit is missing or names an earlier task, the task is not done.** Do not continue
+to the next task. Diagnose once — usually a failed `git add`, an unexpected shell, or nothing
+to commit — then either fix it and retry, or stop and return `status: blocked`.
+
+An executor that reports work it did not commit is worse than one that fails, because the
+worktree is discarded afterwards and the work disappears with it.
+
+### Never fabricate a commit
+
+**`--allow-empty` is forbidden.** A task that leaves no tracked change is not complete.
+
+Git does not track directories, so "create directory X" can never be a standalone task. Fold
+it into the task that writes the first file inside it. If a task genuinely has no output,
+that is a defect in the plan: record it as a deviation and say so in the Summary.
 
 **Commit message format:**
 - `feat` for new features
@@ -380,7 +414,7 @@ git commit -m "feat({phase}-{plan}): {task description}"
 - `docs` for documentation
 - `test` for tests only
 
-**Track commit hash** for Summary reporting.
+**Track commit hash** for Summary reporting — the real one, from `git log -1`.
 
 ---
 

@@ -182,6 +182,28 @@ type(scope): description
 - One task = one commit
 - Verify before commit
 - Scope = phase number for phase work (e.g., `feat(phase-1): ...`)
+- **Confirm the commit landed** with `git log -1 --oneline` before starting the next task
+- **Never `--allow-empty`** — a task with no tracked change is not complete, and git does not
+  track directories
+
+---
+
+## Shell Discipline
+
+**Rule:** one command per invocation. Never chain with `&&` or `||`.
+
+The host shell is not knowable from inside a workflow. Windows PowerShell 5.1 rejects both
+operators with a parse error, so `git add X && git commit -m "..."` does not partially run —
+it does not run at all, while looking like it did.
+
+| Do | Don't |
+|----|-------|
+| `git add -A` then `git commit -m "..."` as two calls | `git add -A && git commit -m "..."` |
+| Read each command's output before the next | Assume success from absence of a visible error |
+| Provide both PowerShell and Bash forms in workflows | Ship a bash-only example as "the" command |
+
+**Why it matters:** a command that never ran produces no error the agent recognises. Work is
+reported as done, the worktree is discarded, and the change is gone.
 
 ---
 

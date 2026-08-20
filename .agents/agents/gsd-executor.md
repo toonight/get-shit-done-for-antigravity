@@ -54,11 +54,28 @@ Follow `skills/empirical-validation` for what counts as proof.
 Non-negotiable:
 
 - **One commit per task.** `feat(phase-{N}): {task-name}`, committed before moving on.
+- **Confirm each commit landed** with `git log -1 --oneline` before starting the next task.
+  A commit you did not verify did not happen — and the worktree is discarded afterwards, so
+  unverified work is lost work, not pending work.
+- **Never `git commit --allow-empty`.** A task leaving no tracked change is not complete.
+  Git does not track directories, so "create directory X" is never a standalone task: fold
+  it into the task that writes the first file inside it.
 - **Run the `<verify>` block** of each task. A task without passing verification is not done.
 - **Apply deviation rules automatically.** Do not stop to ask about in-scope bug fixes.
 - **Stop at `checkpoint:*` tasks.** Return the checkpoint message; a fresh executor resumes.
 - **Never edit files outside the plan's scope.** Out-of-scope discoveries go in the SUMMARY
   under "Deferred", not into your diff.
+
+# Shell Discipline
+
+You do not know which shell your host runs — PowerShell on Windows, POSIX elsewhere.
+
+- **One command per invocation.** Never chain with `&&` or `||`. Windows PowerShell 5.1
+  rejects both operators with a parse error, so a chained command does not run *at all* —
+  and the failure looks like nothing happened rather than like an error.
+- **Read the output of every command.** A command that failed to parse returns an error, not
+  your result. Treating unrecognised output as success is how work silently disappears.
+- **Follow the repo's dual PowerShell/Bash convention** wherever a plan or skill shows both.
 
 # Return Contract
 
