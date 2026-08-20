@@ -2,18 +2,7 @@
 
 All notable changes to GSD for Antigravity.
 
-## [Unreleased]
-
-### Fixed
-- **PowerShell validators could not run on Windows** — `.ps1` scripts containing emoji were stored as UTF-8 without a BOM, so Windows PowerShell 5.1 read them as the system ANSI codepage and failed to parse them entirely (`Le terminateur " est manquant dans la chaine`). `validate-skills`, `validate-templates` and `validate-workflows` were affected
-- **`validate-all.ps1` reported success when a child validator never ran** — a script that fails to launch leaves `$LASTEXITCODE` untouched, so the suite printed "All validators passed!" while nothing had been validated. This is why the encoding fault went unnoticed
-
-### Added
-- `validate-encoding.ps1/.sh` — parses every PowerShell script and checks that any script with non-ASCII characters carries a UTF-8 BOM; wired into `validate-all`
-
----
-
-## [1.6.0] - 2026-08-19
+## [1.6.0] - 2026-08-20
 
 ### Added
 - **Native subagent delegation** — GSD workflows now delegate to Antigravity subagents via `invoke_subagent` instead of running everything in the main context window (closes #15)
@@ -25,6 +14,7 @@ All notable changes to GSD for Antigravity.
 - **Explicit `tools:` grants** on every subagent — the field defaults to an empty list and does not inherit the parent's toolset, so subagents without it can read and explore but cannot write their own artifact
 - `validate-agents` rejects a subagent with no `tools:` and any tool name outside the documented registry — a misspelled name makes a subagent hang rather than fail
 - Return Contracts now require `status: blocked` when a capability is missing, and forbid sending file contents to the parent as a substitute for writing to disk
+- `validate-encoding.ps1/.sh` — parses every PowerShell script and checks that any script with non-ASCII characters carries a UTF-8 BOM; wired into `validate-all`
 
 ### Changed
 - `/execute` delegates one `gsd-executor` per plan and routes on compact result blocks instead of executing inline
@@ -36,6 +26,8 @@ All notable changes to GSD for Antigravity.
 
 ### Fixed
 - **Documentation described subagents that were never spawned** — `/execute` claimed to "spawn focused execution for each plan" with "fresh context per plan execution", `/plan` explained "why subagents", and the executor skill opened with "you are spawned by /execute". None of it was wired to anything; every phase ran in one context window until it was exhausted (#15)
+- **PowerShell validators could not run on Windows** — `.ps1` scripts containing emoji were stored as UTF-8 without a BOM, so Windows PowerShell 5.1 read them as the system ANSI codepage and failed to parse them entirely (`Le terminateur " est manquant dans la chaine`). `validate-skills`, `validate-templates` and `validate-workflows` were affected
+- **`validate-all.ps1` reported success when a child validator never ran** — a script that fails to launch leaves `$LASTEXITCODE` untouched, so the suite printed "All validators passed!" while nothing had been validated. This is why the encoding fault went unnoticed
 
 ### Notes
 - `.gsd/ARCHITECTURE.md` and `.gsd/DECISIONS.md` are gitignored project state, not shipped template files. The design rationale for delegation lives in `.agents/skills/subagent-delegation/SKILL.md`
