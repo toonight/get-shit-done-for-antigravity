@@ -549,6 +549,7 @@ adapters/
 └── 📄 GPT_OSS.md
 
 📂 docs/                     # Operational documentation
+├── 📄 antigravity-cli-guide.md
 ├── 📄 model-selection-playbook.md
 └── 📄 runbook.md
 
@@ -600,6 +601,7 @@ Run validation scripts to verify GSD structure:
 |----------|-------------|
 | [PROJECT_RULES.md](PROJECT_RULES.md) | Canonical model-agnostic rules |
 | [GSD-STYLE.md](GSD-STYLE.md) | Complete style and conventions guide |
+| [Antigravity CLI (agy) Guide](docs/antigravity-cli-guide.md) | Practical guide for running GSD in Antigravity CLI |
 | [Model Selection Playbook](docs/model-selection-playbook.md) | Model selection guidance |
 | [Runbook](docs/runbook.md) | Operational procedures |
 | [Token Optimization Guide](docs/token-optimization-guide.md) | Token efficiency strategies |
